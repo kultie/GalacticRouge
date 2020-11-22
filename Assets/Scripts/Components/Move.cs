@@ -9,6 +9,7 @@ namespace Components
     {
         Vector2 currentPosition;
         Vector2 velocity;
+        Action<Vector2, MapEdge> onAtMapBound;
         private void OnEnable()
         {
             Manager.UpdateManager.AddFixedUpdate(UpdatePosition);
@@ -29,8 +30,24 @@ namespace Components
 
         private void UpdatePosition(float dt)
         {
+            MapEdge edge = GamePlayManager.CheckMapEdge(currentPosition);
+            if (edge != MapEdge.None)
+            {
+                onAtMapBound?.Invoke(velocity, edge);
+            }
             currentPosition += velocity * dt;
             transform.position = currentPosition;
+
+        }
+
+        public void SetOnAtMapBound(Action<Vector2, MapEdge> func)
+        {
+            onAtMapBound = func;
+        }
+
+        public Vector2 RelectVelocity(Vector2 vel, Vector2 normal)
+        {
+            return Vector2.Reflect(vel, normal);
         }
     }
 }

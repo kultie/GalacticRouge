@@ -53,7 +53,7 @@ namespace Components
 
         public void SetDirection(Vector2 value)
         {
-            renderer.transform.rotation = Quaternion.Euler(0, 0, Core.Utilities.VectorToAngle(value));
+            renderer.transform.rotation = Quaternion.Euler(0, 0, Core.Utilities.VectorToAngle(value, 90));
         }
     }
 }
