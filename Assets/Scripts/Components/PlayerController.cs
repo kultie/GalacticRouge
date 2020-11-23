@@ -29,6 +29,5 @@ public class PlayerController : MonoBehaviour
             ship.Turn(true);
         }
         ship.Accelerate();
-
     }
 }

@@ -13,35 +13,16 @@ public class Ship : Entity
     float boostedSpeed;
     [SerializeField]
     float turnRate;
-    Vector2 moveDirection = Vector2.up;
+    [SerializeField]
+    int tickRate;
+    [SerializeField]
+    Bullet currentBullet;
+    [SerializeField]
+    Transform gunPosition;
     Vector2 velocity;
     bool isBoosting;
 
-    private Move _m;
-    protected Move moveComponent
-    {
-        get
-        {
-            if (!_m)
-            {
-                _m = GetComponent<Move>();
-            }
-            return _m;
-        }
-    }
-
-    private SpriteDisplay _d;
-    protected SpriteDisplay displayComponent
-    {
-        get
-        {
-            if (!_d)
-            {
-                _d = GetComponent<SpriteDisplay>();
-            }
-            return _d;
-        }
-    }
+    int tickCounter;
 
     private void Awake()
     {
@@ -49,12 +30,36 @@ public class Ship : Entity
         moveComponent.SetOnAtMapBound(OnAtMapEdge);
     }
 
+    private void OnEnable()
+    {
+        Manager.UpdateManager.AddFixedUpdate(OnFixedUpdate);
+    }
+
+    private void OnDisable()
+    {
+        Manager.UpdateManager.RemoveFixedUpdate(OnFixedUpdate);
+    }
+
+    private void OnFixedUpdate(float dt)
+    {
+        tickCounter++;
+        if (tickCounter >= tickRate) {
+            Tick();
+            tickCounter = 0;
+        }
+    }
+
+    protected virtual void Tick()
+    {
+        SpawnBullet();
+    }
+
     private void OnAtMapEdge(Vector2 arg1, MapEdge arg2)
     {
         Vector2 norm = GamePlayManager.GetEdgeNormal(arg2);
-        moveDirection = moveComponent.RelectVelocity(arg1.normalized, norm).normalized;
+        currentDirection = moveComponent.RelectVelocity(arg1.normalized, norm).normalized;
         float speed = isBoosting ? boostedSpeed : normalSpeed;
-        velocity = moveDirection * speed;
+        velocity = currentDirection * speed;
         moveComponent.SetVelocity(velocity);
         displayComponent.SetDirection(velocity.normalized);
     }
@@ -69,7 +74,7 @@ public class Ship : Entity
     public void Accelerate()
     {
         float speed = isBoosting ? boostedSpeed : normalSpeed;
-        velocity += moveDirection * speed;
+        velocity += currentDirection * speed;
         velocity = Vector2.ClampMagnitude(velocity, speed);
         moveComponent.SetVelocity(velocity);
         displayComponent.SetDirection(velocity.normalized);
@@ -77,14 +82,20 @@ public class Ship : Entity
 
     public void Turn(bool turnRight)
     {
-        float currentDir = Core.Utilities.VectorToAngle(moveDirection);
+        float currentDir = Core.Utilities.VectorToAngle(currentDirection);
         currentDir += turnRight ? -turnRate : turnRate;
-        moveDirection = Core.Utilities.DegreeToVector2(currentDir);
-        moveDirection = moveDirection.normalized;
+        currentDirection = Core.Utilities.DegreeToVector2(currentDir);
+        currentDirection = currentDirection.normalized;
     }
 
     public void SetBoost(bool value)
     {
         isBoosting = value;
+    }
+
+    protected virtual void SpawnBullet() {
+        Bullet b = ObjectPool.Spawn(currentBullet);
+        b.transform.localScale = Vector3.one;
+        b.Setup(gunPosition.position, currentDirection);
     }
 }
