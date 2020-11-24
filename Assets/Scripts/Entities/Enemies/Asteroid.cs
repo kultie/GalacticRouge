@@ -12,12 +12,6 @@ public class Asteroid : Enemy
     {
         currentDirection = Vector2.right;
         moveComponent.SetPosition(transform.position);
-        AddOnTakeDamageCallback(OnTakeDamage);
-    }
-
-    private void OnTakeDamage(Dictionary<string, object> args)
-    {
-        Debug.Log("ouch");
     }
 
     protected override void OnFixedUpdate(float dt)
@@ -45,5 +39,10 @@ public class Asteroid : Enemy
     {
         speed = UnityEngine.Random.Range(stats.GetStat("min_speed"), stats.GetStat("max_speed"));
         rotateSpeed = UnityEngine.Random.Range(stats.GetStat("min_rotate_speed"), stats.GetStat("max_rotate_speed"));
+    }
+
+    protected override void OnDead()
+    {
+        Debug.Log("Asteroid is dead");
     }
 }

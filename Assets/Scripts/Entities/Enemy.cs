@@ -1,4 +1,5 @@
 ﻿using Core.EventDispatcher;
+using MirzaBeig.ParticleSystems;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -73,13 +74,18 @@ public abstract class Enemy : Entity, IVulnerable
     {
         var target = collision.GetComponent<IVulnerable>();
         if (target != null) {
-            target.DealDamage(null);
+            target.OnTakeDamage(null);
         }
     }
 
-    public void DealDamage(Dictionary<string, object> args)
+    public void OnTakeDamage(Dictionary<string, object> args)
     {
         EventDispatcher.Dispatch("on_take_damage_" + GetInstanceID(), args);
+        stats.ProcessHP(-stats.ProcessShield(-(int)args["damage"]));
+        if (stats.CurrentHP() <= 0)
+        {
+            OnDead();
+        }
     }
 
     protected void AddOnTakeDamageCallback(Caller func)
@@ -91,4 +97,6 @@ public abstract class Enemy : Entity, IVulnerable
     {
         EventDispatcher.UnSubscribe("on_take_damage_" + GetInstanceID(), func);
     }
+
+    protected abstract void OnDead();
 }

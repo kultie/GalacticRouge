@@ -4,5 +4,5 @@ using UnityEngine;
 
 public interface IVulnerable
 {
-    void DealDamage(Dictionary<string, object> args);
+    void OnTakeDamage(Dictionary<string, object> args);
 }

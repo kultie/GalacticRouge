@@ -7,6 +7,10 @@ public class Bullet : Entity
 {
     [SerializeField]
     float speed;
+    [SerializeField]
+    int damage;
+
+    private Ship owner;
 
     private void Awake()
     {
@@ -30,8 +34,9 @@ public class Bullet : Entity
         ObjectPool.Recycle(gameObject);
     }
 
-    public void Setup(Vector2 position, Vector2 dir)
+    public void Setup(Ship owner, Vector2 position, Vector2 dir)
     {
+        this.owner = owner;
         gameObject.SetActive(true);
         transform.position = position;
         SetDirection(dir);
@@ -59,7 +64,11 @@ public class Bullet : Entity
         }
         if (target != null)
         {
-            target.DealDamage(null);
+            Dictionary<string, object> args = new Dictionary<string, object>() {
+                { "dealer", owner},
+                { "damage", damage}
+            };
+            target.OnTakeDamage(args);
         }
     }
 }

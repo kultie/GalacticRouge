@@ -104,14 +104,18 @@ public abstract class Ship : Entity, IVulnerable
     {
         Bullet b = ObjectPool.Spawn(currentBullet);
         b.transform.localScale = Vector3.one;
-        b.Setup(gunPosition.position, currentDirection);
+        b.Setup(this, gunPosition.position, currentDirection);
     }
 
     public abstract void OnActiveSpecial(int index);
 
-    public void DealDamage(Dictionary<string, object> args)
+    public void OnTakeDamage(Dictionary<string, object> args)
     {
         EventDispatcher.Dispatch("on_player_take_damage", args);
+        stats.ProcessHP(-stats.ProcessShield(-(int)args["damage"]));
+        if (stats.CurrentHP() <= 0) {
+            Debug.Log("Player is dead");
+        }
     }
 
     protected void AddOnPlayerTakeDamageCallback(Caller func) {

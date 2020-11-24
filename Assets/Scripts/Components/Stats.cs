@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Data.OleDb;
 using UnityEditor;
 using UnityEngine;
 
@@ -9,18 +10,36 @@ public class Stats : MonoBehaviour
     [SerializeField]
     StatDictionary stats;
 
+    private int currentHP;
+    private int currentShield;
+
     private StatDictionary modifiedStats;
     private Dictionary<string, bool> dirtyStats = new Dictionary<string, bool>();
     private Dictionary<string, StatsModiferContainer> statsModifier = new Dictionary<string, StatsModiferContainer>();
     private void Awake()
-    {       
+    {
         modifiedStats = stats.Clone();
+        currentHP = GetStat("max_hp");
+        currentShield = GetStat("max_shield");
+    }
+
+    public void ApplyModifier(StatsModiferContainer[] containers)
+    {
+        currentHP = GetStat("max_hp");
+        currentShield = GetStat("max_shield");
+        for (int i = 0; i < containers.Length; i++)
+        {
+            AddModifier(containers[i]);
+        }
     }
     public int GetStat(string key)
     {
         if (dirtyStats.ContainsKey(key) && dirtyStats[key])
         {
+            int oldValue = modifiedStats["max_hp"];
+
             modifiedStats[key] = RecalculatedStats(key);
+            UpdateStat(key, oldValue, modifiedStats[key]);
             dirtyStats[key] = false;
         }
         return modifiedStats[key];
@@ -45,7 +64,7 @@ public class Stats : MonoBehaviour
     {
         if (statsModifier.ContainsKey(container.key))
         {
-            if (statsModifier[container.key].tier > container.tier)
+            if (statsModifier[container.key].tier >= container.tier)
             {
                 return;
             }
@@ -64,6 +83,55 @@ public class Stats : MonoBehaviour
         foreach (var kv in mod.modiferValues)
         {
             dirtyStats[kv.Key] = true;
+        }
+    }
+
+    public int CurrentHP()
+    {
+        return currentHP;
+    }
+
+    public int CurrentShield()
+    {
+        return currentShield;
+    }
+
+    public void ProcessHP(int value)
+    {
+        currentHP += value;
+        currentHP = Mathf.Clamp(currentHP, 0, GetStat("max_hp"));
+    }
+
+    public int ProcessShield(int value)
+    {
+        int leftOver = 0;
+        if (value < 0) {
+            leftOver = Mathf.Abs(value) - currentShield;
+            leftOver = Mathf.Clamp(leftOver, 0, leftOver);
+        }
+        currentShield += value;
+        currentShield = Mathf.Clamp(currentShield, 0, GetStat("max_shield"));
+        return leftOver;
+    }
+
+    private void UpdateStat(string key, int oldValue, int newValue)
+    {
+        float percentChange = newValue * 1f / oldValue;
+        if (key == "max_hp")
+        {
+            if (percentChange > 1)
+            {
+                currentHP = Mathf.RoundToInt(percentChange * currentHP);
+            }
+            ProcessHP(0);
+        }
+        else if (key == "max_shield")
+        {
+            if (percentChange > 1)
+            {
+                currentShield = Mathf.RoundToInt(percentChange * currentShield);
+            }
+            ProcessShield(0);
         }
     }
 }
