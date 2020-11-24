@@ -1,7 +1,8 @@
 ﻿using Components;
 using UnityEngine;
 
-
+[RequireComponent(typeof(Move))]
+[RequireComponent(typeof(SpriteDisplay))]
 public class Entity : MonoBehaviour
 {
     protected Vector2 currentDirection = Vector2.up;

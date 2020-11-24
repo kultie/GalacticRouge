@@ -1,26 +1,33 @@
 ﻿using Components;
+using Core.EventDispatcher;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
-public class Ship : Entity
+[RequireComponent(typeof(Stats))]
+public abstract class Ship : Entity, IVulnerable
 {
-    [SerializeField]
-    float normalSpeed;
-    [SerializeField]
-    float boostedSpeed;
-    [SerializeField]
-    float turnRate;
-    [SerializeField]
-    int tickRate;
+    private Stats _st;
+    protected Stats stats
+    {
+        get
+        {
+            if (!_st)
+            {
+                _st = GetComponent<Stats>();
+            }
+            return _st;
+        }
+    }
+
     [SerializeField]
     Bullet currentBullet;
     [SerializeField]
     Transform gunPosition;
-    Vector2 velocity;
-    bool isBoosting;
+    [SerializeField]
+    protected Transform stateContainer;
+    protected Vector2 velocity;
 
     int tickCounter;
 
@@ -28,6 +35,11 @@ public class Ship : Entity
     {
         moveComponent.SetPosition(transform.position);
         moveComponent.SetOnAtMapBound(OnAtMapEdge);
+    }
+
+    private void Start()
+    {
+        Initialized();
     }
 
     private void OnEnable()
@@ -43,10 +55,16 @@ public class Ship : Entity
     private void OnFixedUpdate(float dt)
     {
         tickCounter++;
-        if (tickCounter >= tickRate) {
+        if (tickCounter >= stats.GetStat("tick_rate"))
+        {
             Tick();
             tickCounter = 0;
         }
+    }
+
+    protected virtual void Initialized()
+    {
+
     }
 
     protected virtual void Tick()
@@ -58,22 +76,15 @@ public class Ship : Entity
     {
         Vector2 norm = GamePlayManager.GetEdgeNormal(arg2);
         currentDirection = moveComponent.RelectVelocity(arg1.normalized, norm).normalized;
-        float speed = isBoosting ? boostedSpeed : normalSpeed;
+        float speed = stats.GetStat("speed");
         velocity = currentDirection * speed;
         moveComponent.SetVelocity(velocity);
         displayComponent.SetDirection(velocity.normalized);
     }
 
-    public void Setup(JObject data)
+    public virtual void Accelerate()
     {
-        normalSpeed = data["normal_speed"].Value<float>();
-        boostedSpeed = data["boosted_speed"].Value<float>();
-        turnRate = data["turn_rate"].Value<float>();
-    }
-
-    public void Accelerate()
-    {
-        float speed = isBoosting ? boostedSpeed : normalSpeed;
+        float speed = stats.GetStat("speed");
         velocity += currentDirection * speed;
         velocity = Vector2.ClampMagnitude(velocity, speed);
         moveComponent.SetVelocity(velocity);
@@ -83,19 +94,31 @@ public class Ship : Entity
     public void Turn(bool turnRight)
     {
         float currentDir = Core.Utilities.VectorToAngle(currentDirection);
+        int turnRate = stats.GetStat("turn_rate");
         currentDir += turnRight ? -turnRate : turnRate;
         currentDirection = Core.Utilities.DegreeToVector2(currentDir);
         currentDirection = currentDirection.normalized;
     }
 
-    public void SetBoost(bool value)
+    protected virtual void SpawnBullet()
     {
-        isBoosting = value;
-    }
-
-    protected virtual void SpawnBullet() {
         Bullet b = ObjectPool.Spawn(currentBullet);
         b.transform.localScale = Vector3.one;
         b.Setup(gunPosition.position, currentDirection);
+    }
+
+    public abstract void OnActiveSpecial(int index);
+
+    public void DealDamage(Dictionary<string, object> args)
+    {
+        EventDispatcher.Dispatch("on_player_take_damage", args);
+    }
+
+    protected void AddOnPlayerTakeDamageCallback(Caller func) {
+        EventDispatcher.Subscribe("on_player_take_damage", func);
+    }
+
+    protected void RemoveOnPlayerTakeDamageCallback(Caller func) {
+        EventDispatcher.UnSubscribe("on_player_take_damage", func);
     }
 }

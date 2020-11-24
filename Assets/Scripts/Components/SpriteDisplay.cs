@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using UnityEngine;
 namespace Components
 {
-    [RequireComponent(typeof(Entity))]
     public class SpriteDisplay : MonoBehaviour
     {
         [SerializeField]

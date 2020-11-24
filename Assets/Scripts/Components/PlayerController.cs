@@ -28,6 +28,20 @@ public class PlayerController : MonoBehaviour
         {
             ship.Turn(true);
         }
+
+
+        if (Input.GetKeyDown(KeyCode.W))
+        {
+            ship.OnActiveSpecial(1);
+        }
+        else if (Input.GetKeyDown(KeyCode.S))
+        {
+            ship.OnActiveSpecial(2);
+        }
+        else if (Input.GetKeyUp(KeyCode.W) || Input.GetKeyUp(KeyCode.S))
+        {
+            ship.OnActiveSpecial(0);
+        }
         ship.Accelerate();
     }
 }

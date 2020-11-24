@@ -7,19 +7,22 @@ public class Bullet : Entity
 {
     [SerializeField]
     float speed;
-    //private void Awake()
-    //{
-    //    Setup(transform.position, Vector2.up);
-    //}
+
+    private void Awake()
+    {
+        moveComponent.SetOnAtMapBound(OnMapBound);
+    }
     public void SetDirection(Vector2 dir)
     {
+
         currentDirection = dir;
         displayComponent.SetDirection(dir);
     }
 
-    private void OnEnable()
+    private void OnDisable()
     {
-        moveComponent.SetOnAtMapBound(OnMapBound);
+        currentDirection = Vector2.zero;
+        moveComponent.SetPosition(Vector2.zero);
     }
 
     private void OnMapBound(Vector2 arg1, MapEdge arg2)
@@ -27,11 +30,12 @@ public class Bullet : Entity
         ObjectPool.Recycle(gameObject);
     }
 
-    public void Setup(Vector2 position, Vector2 dir) {
+    public void Setup(Vector2 position, Vector2 dir)
+    {
+        gameObject.SetActive(true);
         transform.position = position;
         SetDirection(dir);
         moveComponent.SetPosition(position);
-        gameObject.SetActive(true);
     }
 
     protected virtual void Update()
@@ -45,5 +49,17 @@ public class Bullet : Entity
         velocity = Vector2.ClampMagnitude(velocity, speed);
         moveComponent.SetVelocity(velocity);
         //displayComponent.SetDirection(velocity.normalized);
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        var target = collision.GetComponent<IVulnerable>();
+        if (target == null) {
+            target = collision.GetComponentInParent<IVulnerable>();
+        }
+        if (target != null)
+        {
+            target.DealDamage(null);
+        }
     }
 }

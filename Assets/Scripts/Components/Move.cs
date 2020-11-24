@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using UnityEngine;
 namespace Components
 {
-    [RequireComponent(typeof(Entity))]
     public class Move : MonoBehaviour
     {
         Vector2 currentPosition;
@@ -34,7 +33,7 @@ namespace Components
             if (edge != MapEdge.None)
             {
                 currentPosition = FixMapPositionAtMapEdge(currentPosition, edge);
-                onAtMapBound?.Invoke(velocity, edge);
+                onAtMapBound?.Invoke(velocity, edge);    
             }
             currentPosition += velocity * dt;
             transform.position = currentPosition;
@@ -58,11 +57,11 @@ namespace Components
             {
                 case MapEdge.Top:
                 case MapEdge.Bottom:
-                    value.y = value.y * GamePlayManager.mapBound.y / Mathf.Abs(value.y);
+                    result.y = value.y * GamePlayManager.mapBound.y / Mathf.Abs(value.y);
                     break;
                 case MapEdge.Left:
                 case MapEdge.Right:
-                    value.x = value.x * GamePlayManager.mapBound.x / Mathf.Abs(value.x);
+                    result.x = value.x * GamePlayManager.mapBound.x / Mathf.Abs(value.x);
                     break;
             }
 
