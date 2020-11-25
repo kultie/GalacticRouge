@@ -74,7 +74,7 @@ public abstract class Ship : Entity, IVulnerable
 
     private void OnAtMapEdge(Vector2 arg1, MapEdge arg2)
     {
-        Vector2 norm = GamePlayManager.GetEdgeNormal(arg2);
+        Vector2 norm = GameMap.GetEdgeNormal(arg2);
         currentDirection = moveComponent.RelectVelocity(arg1.normalized, norm).normalized;
         float speed = stats.GetStat("speed");
         velocity = currentDirection * speed;

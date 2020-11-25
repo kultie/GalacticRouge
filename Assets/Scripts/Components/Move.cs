@@ -32,7 +32,7 @@ namespace Components
 
         private void UpdatePosition(float dt)
         {
-            MapEdge edge = GamePlayManager.CheckMapEdge(currentPosition, mapBoundOffset);
+            MapEdge edge = GameMap.CheckMapEdge(currentPosition, mapBoundOffset);
             if (edge != MapEdge.None)
             {
                 currentPosition = FixMapPositionAtMapEdge(currentPosition, edge);
@@ -60,7 +60,7 @@ namespace Components
         Vector2 FixMapPositionAtMapEdge(Vector2 value, MapEdge edge)
         {
             Vector2 result = value;
-            Vector2 bound = GamePlayManager.mapBound + mapBoundOffset;
+            Vector2 bound = GameMap.mapBound + mapBoundOffset;
             switch (edge)
             {
                 case MapEdge.Top:

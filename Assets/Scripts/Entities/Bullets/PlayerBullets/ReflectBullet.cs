@@ -17,7 +17,7 @@ public class ReflectBullet : PlayerBullet
     {
         if (currentBounceCount > 0)
         {
-            Vector2 norm = GamePlayManager.GetEdgeNormal(arg2);
+            Vector2 norm = GameMap.GetEdgeNormal(arg2);
             currentDirection = moveComponent.RelectVelocity(arg1.normalized, norm).normalized;
             moveComponent.SetVelocity(currentDirection * speed);
             displayComponent.SetDirection(currentDirection);

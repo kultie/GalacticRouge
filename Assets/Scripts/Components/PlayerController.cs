@@ -20,6 +20,7 @@ public class PlayerController : MonoBehaviour
 
     protected virtual void Update()
     {
+#if UNITY_EDITOR || UNITY_STANDALONE
         if (Input.GetKey(KeyCode.A))
         {
             ship.Turn(false);
@@ -42,6 +43,15 @@ public class PlayerController : MonoBehaviour
         {
             ship.OnActiveSpecial(0);
         }
+#endif
         ship.Accelerate();
+    }
+
+    public void Turn(bool value) {
+        ship.Turn(value);
+    }
+
+    public void ActiveSpecial(int index) {
+        ship.OnActiveSpecial(index);
     }
 }
