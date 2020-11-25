@@ -22,20 +22,15 @@ public abstract class Enemy : Entity, IVulnerable
     }
     protected Transform stateContainer;
     protected Vector2 velocity;
-
-    private void Start()
-    {
-        Initialized();
-    }
-
-    protected virtual void Initialized()
-    {
-
-    }
-
     public void Setup(Vector2 position)
     {
         moveComponent.SetPosition(position);
+        moveComponent.SetOnAtMapBound(OnAtEdge);
+    }
+
+    protected virtual void OnAtEdge(Vector2 dir, MapEdge edge)
+    {
+        Destroy();
     }
 
     public void SetDirection(Vector2 value)
@@ -73,8 +68,13 @@ public abstract class Enemy : Entity, IVulnerable
     private void OnTriggerEnter2D(Collider2D collision)
     {
         var target = collision.GetComponent<IVulnerable>();
-        if (target != null) {
-            target.OnTakeDamage(null);
+        if (target == null)
+        {
+            target = collision.GetComponentInParent<IVulnerable>();
+        }
+        if (target != null)
+        {
+            DamageResolve.Resolve(this, target, stats.GetStat("damage"));
         }
     }
 
@@ -99,4 +99,10 @@ public abstract class Enemy : Entity, IVulnerable
     }
 
     protected abstract void OnDead();
+    protected void Destroy()
+    {
+        if (gameObject.activeInHierarchy) {
+            ObjectPool.Recycle(this);
+        }
+    }
 }

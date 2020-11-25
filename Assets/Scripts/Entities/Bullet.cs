@@ -1,74 +1,82 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Bullet : Entity
+public abstract class Bullet<T> : Entity where T: Entity
 {
     [SerializeField]
-    float speed;
+    protected float speed;
     [SerializeField]
-    int damage;
+    protected int damage;
+    protected T owner;
 
-    private Ship owner;
+    public T GetOwner() {
+        return owner;
+    }
 
     private void Awake()
     {
         moveComponent.SetOnAtMapBound(OnMapBound);
     }
-    public void SetDirection(Vector2 dir)
+    protected void SetDirection(Vector2 dir)
     {
-
         currentDirection = dir;
         displayComponent.SetDirection(dir);
+    }
+
+    private void OnEnable()
+    {
+        Manager.UpdateManager.AddUpdate(OnUpdate);
     }
 
     private void OnDisable()
     {
         currentDirection = Vector2.zero;
         moveComponent.SetPosition(Vector2.zero);
+        Manager.UpdateManager.RemoveUpdate(OnUpdate);
     }
 
-    private void OnMapBound(Vector2 arg1, MapEdge arg2)
+    protected virtual void OnMapBound(Vector2 arg1, MapEdge arg2)
     {
-        ObjectPool.Recycle(gameObject);
+        if (gameObject.activeInHierarchy)
+        {
+            ObjectPool.Recycle(gameObject);
+        }
+    }
+    protected virtual void OnUpdate(float dt) {
+        Move();
     }
 
-    public void Setup(Ship owner, Vector2 position, Vector2 dir)
+    public void Setup(T owner, Vector2 position, Vector2 dir)
     {
-        this.owner = owner;
         gameObject.SetActive(true);
+        this.owner = owner;
         transform.position = position;
         SetDirection(dir);
         moveComponent.SetPosition(position);
+        OnSetup();
     }
 
-    protected virtual void Update()
-    {
-        Accelerate();
-    }
-
-    private void Accelerate()
-    {
-        Vector2 velocity = currentDirection * speed;
-        velocity = Vector2.ClampMagnitude(velocity, speed);
-        moveComponent.SetVelocity(velocity);
-        //displayComponent.SetDirection(velocity.normalized);
-    }
+    protected abstract void OnSetup();
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
         var target = collision.GetComponent<IVulnerable>();
-        if (target == null) {
+        if (target == null)
+        {
             target = collision.GetComponentInParent<IVulnerable>();
         }
-        if (target != null)
+        if (target != null && gameObject.activeInHierarchy)
         {
-            Dictionary<string, object> args = new Dictionary<string, object>() {
-                { "dealer", owner},
-                { "damage", damage}
-            };
-            target.OnTakeDamage(args);
+            OnCollide(target);
+        }
+    }
+    protected abstract void OnCollide(IVulnerable target);
+    protected abstract void Move();
+
+    protected void Destroy() {
+        if (gameObject.activeInHierarchy) {
+            ObjectPool.Recycle(this);
         }
     }
 }

@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 3300061482306907329}
   - component: {fileID: -2349469360731866949}
   m_Layer: 9
-  m_Name: Bullet
+  m_Name: AcceleratedBullet
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -47,6 +47,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ade061c9f29da35478accd6fd1ed43b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mapBoundOffset: {x: 0, y: 0}
 --- !u!114 &3300061482306907328
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -56,11 +57,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 3300061482306907342}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 00c1db0db3c38e946a7bee41192d876b, type: 3}
+  m_Script: {fileID: 11500000, guid: 87bd9a1dbc3c64f4298534db6c6a9250, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 5
   damage: 1
+  acceleratedRate: 0.1
 --- !u!114 &3300061482306907329
 MonoBehaviour:
   m_ObjectHideFlags: 0

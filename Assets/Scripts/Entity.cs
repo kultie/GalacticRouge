@@ -31,4 +31,8 @@ public class Entity : MonoBehaviour
             return _d;
         }
     }
+
+    public Vector2 CurrentPosition() {
+        return moveComponent.CurrentPosition();
+    }
 }

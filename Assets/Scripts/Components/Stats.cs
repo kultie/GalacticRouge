@@ -9,7 +9,8 @@ public class Stats : MonoBehaviour
 {
     [SerializeField]
     StatDictionary stats;
-
+    [SerializeField]
+    BasicStats basicStats;
     private int currentHP;
     private int currentShield;
 
@@ -18,6 +19,9 @@ public class Stats : MonoBehaviour
     private Dictionary<string, StatsModiferContainer> statsModifier = new Dictionary<string, StatsModiferContainer>();
     private void Awake()
     {
+        stats["max_hp"] = basicStats.maxHP;
+        stats["max_shield"] = basicStats.maxShield;
+        stats["tick_rate"] = basicStats.tickRate;
         modifiedStats = stats.Clone();
         currentHP = GetStat("max_hp");
         currentShield = GetStat("max_shield");
@@ -34,6 +38,7 @@ public class Stats : MonoBehaviour
     }
     public int GetStat(string key)
     {
+        if (!modifiedStats.ContainsKey(key)) return 0;
         if (dirtyStats.ContainsKey(key) && dirtyStats[key])
         {
             int oldValue = modifiedStats["max_hp"];
@@ -105,7 +110,8 @@ public class Stats : MonoBehaviour
     public int ProcessShield(int value)
     {
         int leftOver = 0;
-        if (value < 0) {
+        if (value < 0)
+        {
             leftOver = Mathf.Abs(value) - currentShield;
             leftOver = Mathf.Clamp(leftOver, 0, leftOver);
         }
@@ -160,4 +166,11 @@ public class StatsModifierValue
 {
     public float percent;
     public int flat;
+}
+[Serializable]
+public class BasicStats
+{
+    public int maxHP;
+    public int maxShield;
+    public int tickRate;
 }

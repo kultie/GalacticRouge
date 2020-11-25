@@ -6,6 +6,8 @@ namespace Components
 {
     public class Move : MonoBehaviour
     {
+        [SerializeField]
+        Vector2 mapBoundOffset = Vector2.one;
         Vector2 currentPosition;
         Vector2 velocity;
         Action<Vector2, MapEdge> onAtMapBound;
@@ -20,6 +22,7 @@ namespace Components
         public void SetPosition(Vector2 value)
         {
             currentPosition = value;
+            transform.position = currentPosition;
         }
 
         public void SetVelocity(Vector2 value)
@@ -29,7 +32,7 @@ namespace Components
 
         private void UpdatePosition(float dt)
         {
-            MapEdge edge = GamePlayManager.CheckMapEdge(currentPosition);
+            MapEdge edge = GamePlayManager.CheckMapEdge(currentPosition, mapBoundOffset);
             if (edge != MapEdge.None)
             {
                 currentPosition = FixMapPositionAtMapEdge(currentPosition, edge);
@@ -50,18 +53,23 @@ namespace Components
             return Vector2.Reflect(vel, normal);
         }
 
+        public Vector2 CurrentPosition() {
+            return currentPosition;
+        }
+
         Vector2 FixMapPositionAtMapEdge(Vector2 value, MapEdge edge)
         {
             Vector2 result = value;
+            Vector2 bound = GamePlayManager.mapBound + mapBoundOffset;
             switch (edge)
             {
                 case MapEdge.Top:
                 case MapEdge.Bottom:
-                    result.y = value.y * GamePlayManager.mapBound.y / Mathf.Abs(value.y);
+                    result.y = value.y * bound.y / Mathf.Abs(value.y);
                     break;
                 case MapEdge.Left:
                 case MapEdge.Right:
-                    result.x = value.x * GamePlayManager.mapBound.x / Mathf.Abs(value.x);
+                    result.x = value.x * bound.x / Mathf.Abs(value.x);
                     break;
             }
 

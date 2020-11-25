@@ -22,7 +22,7 @@ public abstract class Ship : Entity, IVulnerable
     }
 
     [SerializeField]
-    Bullet currentBullet;
+    PlayerBullet currentBullet;
     [SerializeField]
     Transform gunPosition;
     [SerializeField]
@@ -102,7 +102,7 @@ public abstract class Ship : Entity, IVulnerable
 
     protected virtual void SpawnBullet()
     {
-        Bullet b = ObjectPool.Spawn(currentBullet);
+        PlayerBullet b = ObjectPool.Spawn(currentBullet);
         b.transform.localScale = Vector3.one;
         b.Setup(this, gunPosition.position, currentDirection);
     }

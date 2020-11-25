@@ -165,6 +165,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ade061c9f29da35478accd6fd1ed43b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mapBoundOffset: {x: 0, y: 0}
 --- !u!114 &5587692125955347600
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -205,13 +206,14 @@ MonoBehaviour:
   stats:
     m_keys:
     - turn_rate
-    - tick_rate
     - speed
     - boosted_speed
     - braking_speed
-    - max_hp
-    - max_shield
-    m_values: 010000003c0000000200000004000000010000000a00000000000000
+    m_values: 01000000020000000400000001000000
+  basicStats:
+    maxHP: 10
+    maxShield: 0
+    tickRate: 30
 --- !u!50 &4712115462221957506
 Rigidbody2D:
   serializedVersion: 4

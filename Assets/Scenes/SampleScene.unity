@@ -767,6 +767,12 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 5587692125955347602, guid: 40cb165662d360d4899de314f63afba6,
+        type: 3}
+      propertyPath: currentBullet
+      value: 
+      objectReference: {fileID: 3300061482306907328, guid: a8c816f1aed7c784c8910a47770c0bc8,
+        type: 3}
     - target: {fileID: 5587692125955347603, guid: 40cb165662d360d4899de314f63afba6,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -820,6 +826,16 @@ PrefabInstance:
     - target: {fileID: 5587692125955347603, guid: 40cb165662d360d4899de314f63afba6,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5587692125955347605, guid: 40cb165662d360d4899de314f63afba6,
+        type: 3}
+      propertyPath: stats.m_keys.Array.data[5]
+      value: max_shield
+      objectReference: {fileID: 0}
+    - target: {fileID: 5587692125955347605, guid: 40cb165662d360d4899de314f63afba6,
+        type: 3}
+      propertyPath: stats.m_values.Array.data[5]
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5587692125955347695, guid: 40cb165662d360d4899de314f63afba6,

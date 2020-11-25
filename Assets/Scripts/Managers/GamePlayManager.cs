@@ -18,14 +18,14 @@ public class GamePlayManager : MonoBehaviour
         Application.targetFrameRate = 60;
     }
 
-    public static MapEdge CheckMapEdge(Vector2 position)
+    public static MapEdge CheckMapEdge(Vector2 position, Vector2 offset)
     {
-        if (Mathf.Abs(position.x) > mapBound.x)
+        if (Mathf.Abs(position.x) > mapBound.x + offset.x)
         {
             return position.x > 0 ? MapEdge.Right : MapEdge.Left;
         }
 
-        if (Mathf.Abs(position.y) > mapBound.y)
+        if (Mathf.Abs(position.y) > mapBound.y + offset.y)
         {
             return position.y > 0 ? MapEdge.Top : MapEdge.Bottom;
         }

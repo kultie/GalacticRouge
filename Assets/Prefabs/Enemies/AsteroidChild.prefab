@@ -15,12 +15,12 @@ GameObject:
   - component: {fileID: 73323581762228842}
   - component: {fileID: 73323581762228841}
   m_Layer: 10
-  m_Name: Asteroid
+  m_Name: AsteroidChild
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &73323581762228846
 Transform:
   m_ObjectHideFlags: 0
@@ -74,8 +74,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9852609cf0ff855458f241d88234fd00, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  childPrefab: {fileID: 73323581762228845, guid: d66a71e3a6590794ca3df436509365cd,
-    type: 3}
+  childPrefab: {fileID: 0}
 --- !u!114 &73323581762228842
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -97,8 +96,7 @@ MonoBehaviour:
     - damage
     - max_scale
     - min_scale
-    - number_of_child
-    m_values: 0100000002000000050000000200000001000000020000000300000003000000
+    m_values: 01000000030000000300000001000000010000000100000002000000
   basicStats:
     maxHP: 1
     maxShield: 1

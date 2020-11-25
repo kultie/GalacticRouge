@@ -54,5 +54,10 @@ namespace Components
         {
             renderer.transform.rotation = Quaternion.Euler(0, 0, Core.Utilities.VectorToAngle(value, 90));
         }
+
+        public void SetScale(float scale)
+        {
+            transform.localScale = Vector3.one * scale;
+        }
     }
 }
