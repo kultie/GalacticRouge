@@ -35,25 +35,15 @@ public abstract class GunBarrel<T> : MonoBehaviour where T : Entity
         }
     }
 
-    public void OnTick(Bullet<T> bullet)
-    {
-        currentBullet = bullet;
-        currentTickCount++;
-        if (currentTickCount % tickRate == 0)
-        {
-            Shoot();
-        }
-    }
-
     public void SetBullet(Bullet<T> bullet)
     {
         currentBullet = bullet;
     }
 
-    protected abstract void Shoot();
+    protected abstract void Shoot(Bullet<T> prefab);
 
-    protected Bullet<T> SpawnBullet()
+    protected Bullet<T> SpawnBullet(Bullet<T> prefab)
     {
-        return ObjectPool.Spawn(currentBullet, bulletContainer);
+        return ObjectPool.Spawn(prefab, bulletContainer);
     }
 }

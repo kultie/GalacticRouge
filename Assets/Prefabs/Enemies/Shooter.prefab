@@ -206,8 +206,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnRequirePoint: 7
   exp: 2
-  gunsBarrel:
-  - {fileID: 8991133879838353906}
   bullet: {fileID: 6321907793565536652, guid: 8e2955cd65da17f4fa9542bed11d7c10, type: 3}
   targetMask:
     serializedVersion: 2
@@ -242,7 +240,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8991133879838353905}
-  - component: {fileID: 8991133879838353906}
+  - component: {fileID: 3879125504452502264}
   m_Layer: 10
   m_Name: GunPoint
   m_TagString: Untagged
@@ -264,7 +262,7 @@ Transform:
   m_Father: {fileID: 8991133878533174495}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8991133879838353906
+--- !u!114 &3879125504452502264
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -273,7 +271,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 8991133879838353907}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 799b87391b5b6814ead0969aa31052b7, type: 3}
+  m_Script: {fileID: 11500000, guid: 3e95b17bb4252be4b8db86dd388d504a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tickRate: 1
+  tickRate: 20
+  searchRange: 5
+  targetMask:
+    serializedVersion: 2
+    m_Bits: 256

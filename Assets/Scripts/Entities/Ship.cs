@@ -23,9 +23,6 @@ namespace GR.Player
                 return _st;
             }
         }
-
-        [SerializeField]
-        protected PlayerBarrel[] guns;
         [SerializeField]
         PlayerBullet currentBullet;
         [SerializeField]
@@ -74,10 +71,6 @@ namespace GR.Player
         protected virtual void Tick()
         {
             totalTick++;
-            for (int i = 0; i < guns.Length; i++)
-            {
-                guns[i].OnTick(currentBullet);
-            }
             EventDispatcher.Dispatch("on_player_tick", new Dictionary<string, object> {
                 { "total_tick", totalTick}
             });
@@ -114,6 +107,10 @@ namespace GR.Player
         protected void ChangeBullet(PlayerBullet newBullet)
         {
             currentBullet = newBullet;
+        }
+
+        public PlayerBullet CurrentBullet() {
+            return currentBullet;
         }
 
         public abstract void OnActiveSpecial(int index);

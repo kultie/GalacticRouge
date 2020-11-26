@@ -5,9 +5,9 @@ namespace GR.Enemy
 {
     public class NormalBarrel : EnemyBarrel
     {
-        protected override void Shoot()
+        protected override void Shoot(Bullet<EnemyShip> prefab)
         {
-            var b = SpawnBullet();
+            var b = SpawnBullet(prefab);
             b.Setup(owner, transform.position, owner.CurrentDirection());
         }
     }

@@ -190,17 +190,17 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1138456305, guid: 40cb165662d360d4899de314f63afba6, type: 3}
+    - target: {fileID: 0}
       propertyPath: directionOffset
       value: 15
       objectReference: {fileID: 0}
-    - target: {fileID: 1138456305, guid: 40cb165662d360d4899de314f63afba6, type: 3}
+    - target: {fileID: 0}
       propertyPath: tickRate
-      value: 1
+      value: 5
       objectReference: {fileID: 0}
-    - target: {fileID: 1138456305, guid: 40cb165662d360d4899de314f63afba6, type: 3}
+    - target: {fileID: 0}
       propertyPath: bulletCount
-      value: 24
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 5587692125955347602, guid: 40cb165662d360d4899de314f63afba6,
         type: 3}
@@ -286,6 +286,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: NS001
+      objectReference: {fileID: 0}
+    - target: {fileID: 7130567772648677855, guid: 40cb165662d360d4899de314f63afba6,
+        type: 3}
+      propertyPath: tickRate
+      value: 5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 40cb165662d360d4899de314f63afba6, type: 3}
