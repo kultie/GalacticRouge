@@ -8,15 +8,7 @@ public abstract class Bullet<T> : Entity where T : Entity
     protected float speed;
     [SerializeField]
     protected int damage;
-    [SerializeField]
-    protected int tickRate = 1;
     protected T owner;
-
-
-    public int GetTickRate()
-    {
-        return tickRate;
-    }
 
     public T GetOwner()
     {

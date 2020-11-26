@@ -1,9 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-namespace GR.Player
+namespace GR.Enemy
 {
-    public class NormalBarrel : PlayerBarrel
+    public class NormalBarrel : EnemyBarrel
     {
         protected override void Shoot()
         {

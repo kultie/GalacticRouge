@@ -1,4 +1,5 @@
 ﻿using Core.EventDispatcher;
+using GR.Enemy;
 using JetBrains.Annotations;
 using Kultie.TimerSystem;
 using Manager;
@@ -43,7 +44,7 @@ public class GamePlayManager : MonoBehaviour
 
     public void GameStart()
     {
-        Manager.UpdateManager.AddFixedUpdate(OnFixedUpdate);
+        UpdateManager.AddFixedUpdate(OnFixedUpdate);
         CreatePointByLevel();
         CreateExpByLevel();
         SpawnEnemy();
@@ -53,7 +54,7 @@ public class GamePlayManager : MonoBehaviour
 
 
 
-    public void OnLevelUp()
+    private void OnLevelUp()
     {
         EventDispatcher.Dispatch("on_level_up", new Dictionary<string, object>() {
             {"current_level", currentLevel },
@@ -62,10 +63,18 @@ public class GamePlayManager : MonoBehaviour
 
     void SpawnEnemy()
     {
-        Enemy[] enemies = levels[currentLevel].GetEnemies(pointByLevel[currentLevel]);
+        int point = 999;
+        int level = levels.Length - 1;
+        if (currentLevel < pointByLevel.Length)
+        {
+            point = pointByLevel[currentLevel];
+            level = currentLevel;
+        }
+
+        EnemyShip[] enemies = levels[level].GetEnemies(point);
         for (int i = 0; i < enemies.Length; i++)
         {
-            Enemy e = ObjectPool.Spawn(enemies[i]);
+            EnemyShip e = ObjectPool.Spawn(enemies[i]);
             e.Setup(RandomEnemyPosition());
         }
         timer.After(Random.Range(minSpawn, maxSpawn), SpawnEnemy);
@@ -104,27 +113,38 @@ public class GamePlayManager : MonoBehaviour
         }
     }
 
-    public void AddExp(int value)
+    public static void AddExp(int value)
     {
-        currentExp += value;
-        if (currentExp >= expByLevel[currentLevel])
+        if (Instance.currentLevel >= Instance.expByLevel.Length) return;
+        Instance.currentExp += value;
+        if (Instance.currentExp >= Instance.expByLevel[Instance.currentLevel])
         {
-            currentExp = currentExp - expByLevel[currentLevel];
-            currentLevel++;
-            OnLevelUp();
+            Instance.currentExp = Instance.currentExp - Instance.expByLevel[Instance.currentLevel];
+            Instance.currentLevel++;
+            Instance.OnLevelUp();
         }
-        EventDispatcher.Dispatch("on_exp_change", new Dictionary<string, object>() {
-            { "current_exp", currentExp },
-            { "current_require", expByLevel[currentLevel]}
-        });
+        if (Instance.currentLevel >= Instance.expByLevel.Length)
+        {
+            EventDispatcher.Dispatch("on_exp_change", new Dictionary<string, object>() {
+                { "current_exp",  Instance.currentExp },
+                { "current_require",  0}
+            });
+        }
+        else
+        {
+            EventDispatcher.Dispatch("on_exp_change", new Dictionary<string, object>() {
+                { "current_exp",  Instance.currentExp },
+                { "current_require",  Instance.expByLevel[ Instance.currentLevel]}
+            });
+        }
     }
 
-    public void SpawnItem()
+    private void SpawnItem()
     {
         timer.After(itemInterval, SpawnItem);
     }
 
-    public void SpawnBullet()
+    private void SpawnBullet()
     {
         timer.After(itemInterval, SpawnBullet);
     }

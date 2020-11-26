@@ -78,7 +78,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5587692125901990935}
-  - component: {fileID: 2621802477341765895}
+  - component: {fileID: 1138456305}
   m_Layer: 8
   m_Name: GunPos
   m_TagString: Untagged
@@ -100,7 +100,7 @@ Transform:
   m_Father: {fileID: 5587692127129467385}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2621802477341765895
+--- !u!114 &1138456305
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -109,10 +109,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 5587692125901990932}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fb0e32771c76d064fb3f4747d5b4a216, type: 3}
+  m_Script: {fileID: 11500000, guid: 39135a783be95a646a3a78e96ca89bb8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tickRate: 3
+  tickRate: 5
+  directionOffset: 15
+  bulletCount: 2
 --- !u!1 &5587692125955347695
 GameObject:
   m_ObjectHideFlags: 0
@@ -163,8 +165,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ef4ceb557d7b724583f0408d8551064, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gun: {fileID: 2621802477341765895}
-  currentBullet: {fileID: 3300061482306907328, guid: a8c816f1aed7c784c8910a47770c0bc8,
+  guns:
+  - {fileID: 1138456305}
+  currentBullet: {fileID: 3300061482306907328, guid: f56e18695a7594944a9686fb19390417,
     type: 3}
   stateContainer: {fileID: 5587692125322273534}
 --- !u!114 &5587692125955347601
@@ -220,14 +223,14 @@ MonoBehaviour:
   stats:
     m_keys:
     - turn_rate
-    - speed
     - boosted_speed
     - braking_speed
-    m_values: 01000000020000000400000001000000
+    m_values: 010000000400000001000000
   basicStats:
     maxHP: 10
     maxShield: 0
     tickRate: 10
+    speed: 2
 --- !u!50 &4712115462221957506
 Rigidbody2D:
   serializedVersion: 4

@@ -1,65 +1,72 @@
 ﻿using System.Security.Cryptography;
 using UnityEngine;
-
-public class Asteroid : Enemy
+namespace GR.Enemy
 {
-    Vector2 currentRotation = Vector2.up;
-    int speed;
-    int rotateSpeed;
-    int childNumb;
-    [SerializeField]
-    Asteroid childPrefab;
-
-    private void Start()
+    public class Asteroid : EnemyShip
     {
-        moveComponent.SetPosition(transform.position);
-    }
+        Vector2 currentRotation = Vector2.up;
+        int speed;
+        int rotateSpeed;
+        int childNumb;
+        [SerializeField]
+        Asteroid childPrefab;
 
-    protected override void OnFixedUpdate(float dt)
-    {
-        Accelerate();
-        RotateDisplay();
-    }
-
-    protected override void Accelerate()
-    {
-        velocity = currentDirection.normalized * speed;
-        velocity = Vector2.ClampMagnitude(velocity, speed);
-        moveComponent.SetVelocity(velocity);
-    }
-
-    private void RotateDisplay()
-    {
-        float currentAngle = Core.Utilities.VectorToAngle(currentRotation);
-        currentAngle += velocity.x < 0 ? rotateSpeed : -rotateSpeed;
-        currentRotation = Core.Utilities.DegreeToVector2(currentAngle);
-        displayComponent.SetDirection(currentRotation);
-    }
-
-    protected override void OnSetup()
-    {
-        speed = Random.Range(stats.GetStat("min_speed"), stats.GetStat("max_speed"));
-        rotateSpeed = Random.Range(stats.GetStat("min_rotate_speed"), stats.GetStat("max_rotate_speed"));
-        float scale = Random.Range(stats.GetStat("max_scale") * 1f, stats.GetStat("min_scale") * 1f);
-        displayComponent.SetScale(scale);
-        childNumb = stats.GetStat("number_of_child");
-    }
-
-    protected override void OnDead()
-    {
-        if (gameObject.activeInHierarchy)
+        private void Start()
         {
-            if (childPrefab != null)
+            moveComponent.SetPosition(transform.position);
+        }
+
+        protected override void OnFixedUpdate(float dt)
+        {
+            Accelerate();
+            RotateDisplay();
+        }
+
+        protected override void Accelerate()
+        {
+            velocity = currentDirection.normalized * speed;
+            velocity = Vector2.ClampMagnitude(velocity, speed);
+            moveComponent.SetVelocity(velocity);
+        }
+
+        private void RotateDisplay()
+        {
+            float currentAngle = Core.Utilities.VectorToAngle(currentRotation);
+            currentAngle += velocity.x < 0 ? rotateSpeed : -rotateSpeed;
+            currentRotation = Core.Utilities.DegreeToVector2(currentAngle);
+            displayComponent.SetDirection(currentRotation);
+        }
+
+        protected override void OnSetup()
+        {
+            speed = Random.Range(stats.GetStat("min_speed"), stats.GetStat("max_speed"));
+            rotateSpeed = Random.Range(stats.GetStat("min_rotate_speed"), stats.GetStat("max_rotate_speed"));
+            float scale = Random.Range(stats.GetStat("max_scale") * 1f, stats.GetStat("min_scale") * 1f);
+            displayComponent.SetScale(scale);
+            childNumb = stats.GetStat("number_of_child");
+        }
+
+        protected override void OnDead()
+        {
+            if (gameObject.activeInHierarchy)
             {
-                for (int i = 0; i < childNumb; i++)
+                if (childPrefab != null)
                 {
-                    var child = ObjectPool.Spawn(childPrefab);
-                    child.Setup(CurrentPosition() + new Vector2(Random.Range(-1f, 1f), Random.Range(-1f, 1f)));
-                    child.SetDirection(new Vector2(Random.Range(-1f, 1f), Random.Range(-1f, 1f)));
-                    child.gameObject.SetActive(true);
+                    for (int i = 0; i < childNumb; i++)
+                    {
+                        var child = ObjectPool.Spawn(childPrefab);
+                        child.Setup(CurrentPosition() + new Vector2(Random.Range(-1f, 1f), Random.Range(-1f, 1f)));
+                        child.SetDirection(new Vector2(Random.Range(-1f, 1f), Random.Range(-1f, 1f)));
+                        child.gameObject.SetActive(true);
+                    }
                 }
+                Destroy();
             }
-            Destroy();
+        }
+
+        protected override void OnTick()
+        {
+
         }
     }
 }

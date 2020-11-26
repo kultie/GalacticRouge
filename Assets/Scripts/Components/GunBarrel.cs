@@ -45,6 +45,11 @@ public abstract class GunBarrel<T> : MonoBehaviour where T : Entity
         }
     }
 
+    public void SetBullet(Bullet<T> bullet)
+    {
+        currentBullet = bullet;
+    }
+
     protected abstract void Shoot();
 
     protected Bullet<T> SpawnBullet()

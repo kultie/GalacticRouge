@@ -22,6 +22,7 @@ public class Stats : MonoBehaviour
         stats["max_hp"] = basicStats.maxHP;
         stats["max_shield"] = basicStats.maxShield;
         stats["tick_rate"] = basicStats.tickRate;
+        stats["speed"] = basicStats.speed;
         modifiedStats = stats.Clone();
         currentHP = GetStat("max_hp");
         currentShield = GetStat("max_shield");
@@ -173,4 +174,5 @@ public class BasicStats
     public int maxHP;
     public int maxShield;
     public int tickRate;
+    public int speed;
 }

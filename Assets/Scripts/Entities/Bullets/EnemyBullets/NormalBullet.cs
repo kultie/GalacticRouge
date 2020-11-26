@@ -1,9 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-namespace GR.Player
+namespace GR.Enemy
 {
-    public abstract class PlayerBarrel : GunBarrel<Ship>
+    public class NormalBullet : EnemyBullet
     {
 
     }

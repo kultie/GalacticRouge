@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-namespace GR.Player
+namespace GR.Enemy
 {
-    public abstract class PlayerBullet : Bullet<Ship>
+    public abstract class EnemyBullet : Bullet<EnemyShip>
     {
         protected override void Move()
         {
@@ -17,6 +16,11 @@ namespace GR.Player
         {
             DamageResolve.Resolve(this, target, damage);
             Destroy();
+        }
+
+        protected override void OnSetup()
+        {
+
         }
     }
 }

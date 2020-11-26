@@ -2,60 +2,63 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
-public class NS001 : Ship
+namespace GR.Player.NS
 {
-    NS001Context context;
-    StateMachine<NS001Context> mainStates;
-    protected override void Initialized()
+    public class NS001 : Ship
     {
-        context = new NS001Context(stats);
-        mainStates = new StateMachine<NS001Context>(context);
-        IState<NS001Context>[] states = stateContainer.GetComponents<IState<NS001Context>>();
-        for (int i = 0; i < states.Length; i++)
+        NS001Context context;
+        StateMachine<NS001Context> mainStates;
+        protected override void Initialized()
         {
-            mainStates.AddState(states[i]);
-        }
-        mainStates.Change("default");
-    }
-    public override void Accelerate()
-    {
-        float speed = context.currentSpeed;
-        velocity += currentDirection * speed;
-        velocity = Vector2.ClampMagnitude(velocity, speed);
-        moveComponent.SetVelocity(velocity);
-        displayComponent.SetDirection(velocity.normalized);
-    }
-
-    public override void OnActiveSpecial(int index)
-    {
-        if (index == 0)
-        {
+            context = new NS001Context(stats);
+            mainStates = new StateMachine<NS001Context>(context);
+            IState<NS001Context>[] states = stateContainer.GetComponents<IState<NS001Context>>();
+            for (int i = 0; i < states.Length; i++)
+            {
+                mainStates.AddState(states[i]);
+            }
             mainStates.Change("default");
         }
-        else if (index == 1)
+        public override void Accelerate()
         {
-            mainStates.Change("boost");
+            float speed = context.currentSpeed;
+            velocity += currentDirection * speed;
+            velocity = Vector2.ClampMagnitude(velocity, speed);
+            moveComponent.SetVelocity(velocity);
+            displayComponent.SetDirection(currentDirection);
         }
-        else if (index == 2)
+
+        public override void OnActiveSpecial(int index)
         {
-            mainStates.Change("brake");
+            if (index == 0)
+            {
+                mainStates.Change("default");
+            }
+            else if (index == 1)
+            {
+                mainStates.Change("boost");
+            }
+            else if (index == 2)
+            {
+                mainStates.Change("brake");
+            }
         }
-    }
-}
 
-public class NS001Context : ShipContext
-{
-    public int currentSpeed { get; private set; }
-    public Stats stats { get; private set; }
-    public NS001Context(Stats stats)
-    {
-        this.stats = stats;
-        currentSpeed = stats.GetStat("speed");
     }
 
-    public void SetCurrentSpeed(int value)
+    public class NS001Context : ShipContext
     {
-        currentSpeed = value;
+        public int currentSpeed { get; private set; }
+        public Stats stats { get; private set; }
+        public NS001Context(Stats stats)
+        {
+            this.stats = stats;
+            currentSpeed = stats.GetStat("speed");
+        }
+
+        public void SetCurrentSpeed(int value)
+        {
+            currentSpeed = value;
+        }
     }
 }
