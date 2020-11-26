@@ -16,6 +16,18 @@ public enum MapEdge
 public class GamePlayManager : MonoBehaviour
 {
     static GamePlayManager Instance;
+    static Transform _enemyContainer;
+    public static Transform enemyContainer
+    {
+        get
+        {
+            if (!_enemyContainer)
+            {
+                _enemyContainer = GameObject.Find("EnemyContainer").transform;
+            }
+            return _enemyContainer;
+        }
+    }
     [SerializeField]
     Level[] levels;
     [SerializeField]
@@ -74,7 +86,7 @@ public class GamePlayManager : MonoBehaviour
         EnemyShip[] enemies = levels[level].GetEnemies(point);
         for (int i = 0; i < enemies.Length; i++)
         {
-            EnemyShip e = ObjectPool.Spawn(enemies[i]);
+            EnemyShip e = ObjectPool.Spawn(enemies[i], enemyContainer);
             e.Setup(RandomEnemyPosition());
         }
         timer.After(Random.Range(minSpawn, maxSpawn), SpawnEnemy);

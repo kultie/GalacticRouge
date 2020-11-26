@@ -54,13 +54,12 @@ namespace GR.Enemy
                 {
                     for (int i = 0; i < childNumb; i++)
                     {
-                        var child = ObjectPool.Spawn(childPrefab);
+                        var child = ObjectPool.Spawn(childPrefab, GamePlayManager.enemyContainer);
                         child.Setup(CurrentPosition() + new Vector2(Random.Range(-1f, 1f), Random.Range(-1f, 1f)));
                         child.SetDirection(new Vector2(Random.Range(-1f, 1f), Random.Range(-1f, 1f)));
                         child.gameObject.SetActive(true);
                     }
                 }
-                Destroy();
             }
         }
 

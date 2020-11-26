@@ -7,6 +7,7 @@ using UnityEngine;
 namespace GR.Enemy
 {
     [RequireComponent(typeof(Stats))]
+    [RequireComponent(typeof(Rigidbody2D))]
     public abstract class EnemyShip : Entity, IVulnerable
     {
         private Stats _st;
@@ -115,6 +116,7 @@ namespace GR.Enemy
                 isDead = true;
                 GamePlayManager.AddExp(exp);
                 OnDead();
+                Destroy();
             }
         }
 

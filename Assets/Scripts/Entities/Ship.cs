@@ -8,6 +8,7 @@ using UnityEngine;
 namespace GR.Player
 {
     [RequireComponent(typeof(Stats))]
+    [RequireComponent(typeof(Rigidbody2D))]
     public abstract class Ship : Entity, IVulnerable
     {
         private Stats _st;
