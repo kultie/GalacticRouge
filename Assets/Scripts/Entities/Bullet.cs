@@ -1,16 +1,25 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
-public abstract class Bullet<T> : Entity where T: Entity
+public abstract class Bullet<T> : Entity where T : Entity
 {
     [SerializeField]
     protected float speed;
     [SerializeField]
     protected int damage;
+    [SerializeField]
+    protected int tickRate = 1;
     protected T owner;
 
-    public T GetOwner() {
+
+    public int GetTickRate()
+    {
+        return tickRate;
+    }
+
+    public T GetOwner()
+    {
         return owner;
     }
 
@@ -43,21 +52,10 @@ public abstract class Bullet<T> : Entity where T: Entity
             ObjectPool.Recycle(gameObject);
         }
     }
-    protected virtual void OnUpdate(float dt) {
+    protected virtual void OnUpdate(float dt)
+    {
         Move();
     }
-
-    public void Setup(T owner, Vector2 position, Vector2 dir)
-    {
-        gameObject.SetActive(true);
-        this.owner = owner;
-        transform.position = position;
-        SetDirection(dir);
-        moveComponent.SetPosition(position);
-        OnSetup();
-    }
-
-    protected abstract void OnSetup();
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -74,8 +72,22 @@ public abstract class Bullet<T> : Entity where T: Entity
     protected abstract void OnCollide(IVulnerable target);
     protected abstract void Move();
 
-    protected void Destroy() {
-        if (gameObject.activeInHierarchy) {
+    public virtual void Setup(T owner, Vector2 position, Vector2 direction)
+    {
+        this.owner = owner;
+        moveComponent.SetPosition(position);
+        SetDirection(direction);
+        transform.localScale = Vector3.one;
+        gameObject.SetActive(true);
+        OnSetup();
+    }
+
+    protected abstract void OnSetup();
+
+    protected void Destroy()
+    {
+        if (gameObject.activeInHierarchy)
+        {
             ObjectPool.Recycle(this);
         }
     }

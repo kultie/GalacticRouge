@@ -22,14 +22,15 @@ public abstract class Ship : Entity, IVulnerable
     }
 
     [SerializeField]
-    PlayerBullet currentBullet;
+    protected PlayerBarrel gun;
     [SerializeField]
-    Transform gunPosition;
+    PlayerBullet currentBullet;
     [SerializeField]
     protected Transform stateContainer;
     protected Vector2 velocity;
 
     int tickCounter;
+    int totalTick;
 
     private void Awake()
     {
@@ -69,7 +70,11 @@ public abstract class Ship : Entity, IVulnerable
 
     protected virtual void Tick()
     {
-        SpawnBullet();
+        totalTick++;
+        gun.OnTick(currentBullet);
+        EventDispatcher.Dispatch("on_player_tick", new Dictionary<string, object> {
+            { "total_tick", totalTick}
+        });
     }
 
     private void OnAtMapEdge(Vector2 arg1, MapEdge arg2)
@@ -100,11 +105,9 @@ public abstract class Ship : Entity, IVulnerable
         currentDirection = currentDirection.normalized;
     }
 
-    protected virtual void SpawnBullet()
+    protected void ChangeBullet(PlayerBullet newBullet)
     {
-        PlayerBullet b = ObjectPool.Spawn(currentBullet);
-        b.transform.localScale = Vector3.one;
-        b.Setup(this, gunPosition.position, currentDirection);
+        currentBullet = newBullet;
     }
 
     public abstract void OnActiveSpecial(int index);
@@ -113,16 +116,19 @@ public abstract class Ship : Entity, IVulnerable
     {
         EventDispatcher.Dispatch("on_player_take_damage", args);
         stats.ProcessHP(-stats.ProcessShield(-(int)args["damage"]));
-        if (stats.CurrentHP() <= 0) {
+        if (stats.CurrentHP() <= 0)
+        {
             Debug.Log("Player is dead");
         }
     }
 
-    protected void AddOnPlayerTakeDamageCallback(Caller func) {
+    protected void AddOnPlayerTakeDamageCallback(Caller func)
+    {
         EventDispatcher.Subscribe("on_player_take_damage", func);
     }
 
-    protected void RemoveOnPlayerTakeDamageCallback(Caller func) {
+    protected void RemoveOnPlayerTakeDamageCallback(Caller func)
+    {
         EventDispatcher.UnSubscribe("on_player_take_damage", func);
     }
 }

@@ -12,10 +12,6 @@ public class Asteroid : Enemy
 
     private void Start()
     {
-        if (childPrefab != null)
-        {
-            currentDirection = Vector2.right;
-        }
         moveComponent.SetPosition(transform.position);
     }
 
@@ -40,7 +36,7 @@ public class Asteroid : Enemy
         displayComponent.SetDirection(currentRotation);
     }
 
-    protected override void _internalOnEnable()
+    protected override void OnSetup()
     {
         speed = Random.Range(stats.GetStat("min_speed"), stats.GetStat("max_speed"));
         rotateSpeed = Random.Range(stats.GetStat("min_rotate_speed"), stats.GetStat("max_rotate_speed"));

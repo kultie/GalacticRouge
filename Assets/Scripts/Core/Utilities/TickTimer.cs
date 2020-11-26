@@ -1,14 +1,11 @@
-﻿
-using System.Collections;
+﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
-using System.Linq;
-using System;
 namespace Kultie.TimerSystem
 {
-    public class Timer
+    public class TickTimer
     {
-        Dictionary<string, TimerElement> dicTimer;
+        Dictionary<string, TickTimerElement> dicTimer;
 
         public bool isRunning
         {
@@ -17,14 +14,14 @@ namespace Kultie.TimerSystem
                 return dicTimer.Count > 0;
             }
         }
-        public Timer()
+        public TickTimer()
         {
-            dicTimer = new Dictionary<string, TimerElement>();
+            dicTimer = new Dictionary<string, TickTimerElement>();
         }
 
-        public void After(float delay, Action action, bool repeatable = false, string tag = "")
+        public void After(int delay, Action action, bool repeatable = false, string tag = "")
         {
-            TimerElement timer = new TimerElement(delay, action, repeatable);
+            TickTimerElement timer = new TickTimerElement(delay, action, repeatable);
             if (string.IsNullOrEmpty(tag)) tag = Guid.NewGuid().ToString();
             if (dicTimer.ContainsKey(tag))
             {
@@ -36,9 +33,9 @@ namespace Kultie.TimerSystem
             }
         }
 
-        public void After(float delay, Action action, int repeatTime, string tag = "")
+        public void After(int delay, Action action, int repeatTime, string tag = "")
         {
-            TimerElement timer = new TimerElement(delay, action, repeatTime);
+            TickTimerElement timer = new TickTimerElement(delay, action, repeatTime);
             if (string.IsNullOrEmpty(tag)) tag = DateTime.Now.ToString();
             if (dicTimer.ContainsKey(tag))
             {
@@ -50,14 +47,14 @@ namespace Kultie.TimerSystem
             }
         }
 
-        public void Update(float dt)
+        public void Update()
         {
-            var list = new Dictionary<string, TimerElement>(dicTimer);
-            foreach (KeyValuePair<string, TimerElement> val in list)
+            var list = new Dictionary<string, TickTimerElement>(dicTimer);
+            foreach (KeyValuePair<string, TickTimerElement> val in list)
             {
-                TimerElement timer = val.Value;
-                timer.currentTime = timer.currentTime + dt;
-                if (timer.currentTime > timer.delay)
+                TickTimerElement timer = val.Value;
+                timer.currentTick = timer.currentTick + 1;
+                if (timer.currentTick > timer.delay)
                 {
                     if (timer.action != null)
                     {
@@ -70,7 +67,7 @@ namespace Kultie.TimerSystem
                             timer.repeatTime = timer.repeatTime - 1;
                             if (timer.repeatTime > 0)
                             {
-                                timer.currentTime = 0;
+                                timer.currentTick = 0;
                             }
                             else
                             {
@@ -80,7 +77,7 @@ namespace Kultie.TimerSystem
                         }
                         else
                         {
-                            timer.currentTime = 0;
+                            timer.currentTick = 0;
                         }
                     }
                     else
@@ -102,28 +99,28 @@ namespace Kultie.TimerSystem
         }
     }
 
-    class TimerElement
+    class TickTimerElement
     {
-        public float delay;
+        public int delay;
         public Action action;
         public bool repeatable;
         public int repeatTime;
-        public float currentTime;
+        public int currentTick;
 
-        public TimerElement(float _delay, Action _action, bool _repeatable)
+        public TickTimerElement(int _delay, Action _action, bool _repeatable)
         {
             delay = _delay;
             action = _action;
             repeatable = _repeatable;
-            currentTime = 0;
+            currentTick = 0;
         }
 
-        public TimerElement(float _delay, Action _action, int _repeatTime)
+        public TickTimerElement(int _delay, Action _action, int _repeatTime)
         {
             delay = _delay;
             action = _action;
             repeatTime = _repeatTime;
-            currentTime = 0;
+            currentTick = 0;
             if (repeatTime > 0)
             {
                 repeatable = true;

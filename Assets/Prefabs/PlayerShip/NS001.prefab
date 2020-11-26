@@ -78,6 +78,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5587692125901990935}
+  - component: {fileID: 2621802477341765895}
   m_Layer: 8
   m_Name: GunPos
   m_TagString: Untagged
@@ -93,12 +94,25 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5587692125901990932}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.19, z: 0}
+  m_LocalPosition: {x: 0, y: 0.4, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 5587692127129467385}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2621802477341765895
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5587692125901990932}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb0e32771c76d064fb3f4747d5b4a216, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tickRate: 3
 --- !u!1 &5587692125955347695
 GameObject:
   m_ObjectHideFlags: 0
@@ -149,9 +163,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ef4ceb557d7b724583f0408d8551064, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentBullet: {fileID: 3300061482306907328, guid: f56e18695a7594944a9686fb19390417,
+  gun: {fileID: 2621802477341765895}
+  currentBullet: {fileID: 3300061482306907328, guid: a8c816f1aed7c784c8910a47770c0bc8,
     type: 3}
-  gunPosition: {fileID: 5587692125901990935}
   stateContainer: {fileID: 5587692125322273534}
 --- !u!114 &5587692125955347601
 MonoBehaviour:
@@ -213,7 +227,7 @@ MonoBehaviour:
   basicStats:
     maxHP: 10
     maxShield: 0
-    tickRate: 30
+    tickRate: 10
 --- !u!50 &4712115462221957506
 Rigidbody2D:
   serializedVersion: 4

@@ -62,6 +62,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 5
   damage: 1
+  tickRate: 1
   acceleratedRate: 0.1
 --- !u!114 &3300061482306907329
 MonoBehaviour:

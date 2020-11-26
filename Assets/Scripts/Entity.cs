@@ -32,7 +32,13 @@ public class Entity : MonoBehaviour
         }
     }
 
-    public Vector2 CurrentPosition() {
+    public Vector2 CurrentPosition()
+    {
         return moveComponent.CurrentPosition();
+    }
+
+    public Vector2 CurrentDirection()
+    {
+        return currentDirection;
     }
 }

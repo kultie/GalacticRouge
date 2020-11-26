@@ -22,11 +22,26 @@ public abstract class Enemy : Entity, IVulnerable
     }
     protected Transform stateContainer;
     protected Vector2 velocity;
+    bool isDead;
+
+    public int spawnRequirePoint;
     public void Setup(Vector2 position)
     {
+        Manager.UpdateManager.AddFixedUpdate(OnFixedUpdate);
         moveComponent.SetPosition(position);
         moveComponent.SetOnAtMapBound(OnAtEdge);
+        isDead = false;
+        gameObject.SetActive(true);
+        Vector2 direction = Vector2.right;
+        if (position.x > 0)
+        {
+            direction = Vector2.left;
+        }
+        SetDirection(direction);
+        OnSetup();
     }
+
+    protected abstract void OnSetup();
 
     protected virtual void OnAtEdge(Vector2 dir, MapEdge edge)
     {
@@ -36,19 +51,6 @@ public abstract class Enemy : Entity, IVulnerable
     public void SetDirection(Vector2 value)
     {
         currentDirection = value;
-    }
-
-    private void OnEnable()
-    {
-        Manager.UpdateManager.AddFixedUpdate(OnFixedUpdate);
-        _internalOnEnable();
-    }
-
-    protected abstract void _internalOnEnable();
-
-    private void OnDisable()
-    {
-        Manager.UpdateManager.RemoveFixedUpdate(OnFixedUpdate);
     }
 
     protected virtual void OnFixedUpdate(float dt)
@@ -80,10 +82,12 @@ public abstract class Enemy : Entity, IVulnerable
 
     public void OnTakeDamage(Dictionary<string, object> args)
     {
+        if (isDead) return;
         EventDispatcher.Dispatch("on_take_damage_" + GetInstanceID(), args);
         stats.ProcessHP(-stats.ProcessShield(-(int)args["damage"]));
         if (stats.CurrentHP() <= 0)
         {
+            isDead = true;
             OnDead();
         }
     }
@@ -101,8 +105,10 @@ public abstract class Enemy : Entity, IVulnerable
     protected abstract void OnDead();
     protected void Destroy()
     {
-        if (gameObject.activeInHierarchy) {
+        if (gameObject.activeInHierarchy)
+        {
             ObjectPool.Recycle(this);
+            Manager.UpdateManager.RemoveFixedUpdate(OnFixedUpdate);
         }
     }
 }
