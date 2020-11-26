@@ -56,10 +56,9 @@ namespace GR.Player
         private void OnFixedUpdate(float dt)
         {
             tickCounter++;
-            if (tickCounter >= stats.GetStat("tick_rate"))
+            if (tickCounter % stats.GetStat("tick_rate") == 0)
             {
                 Tick();
-                tickCounter = 0;
             }
         }
 
@@ -109,7 +108,8 @@ namespace GR.Player
             currentBullet = newBullet;
         }
 
-        public PlayerBullet CurrentBullet() {
+        public PlayerBullet CurrentBullet()
+        {
             return currentBullet;
         }
 

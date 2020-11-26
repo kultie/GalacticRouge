@@ -10,8 +10,6 @@ namespace GR.Enemy
     {
         [SerializeField]
         EnemyBullet bullet;
-        [SerializeField]
-        LayerMask targetMask;
         protected override void OnDead()
         {
 

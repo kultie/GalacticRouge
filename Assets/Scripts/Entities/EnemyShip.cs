@@ -65,10 +65,9 @@ namespace GR.Enemy
         protected virtual void OnFixedUpdate(float dt)
         {
             tickCounter++;
-            if (tickCounter >= stats.GetStat("tick_rate"))
+            if (tickCounter % stats.GetStat("tick_rate") == 0)
             {
                 Tick();
-                tickCounter = 0;
             }
             Accelerate();
         }

@@ -17,7 +17,7 @@ namespace GR.Player
         float turnRate;
 
         Vector2 velocity;
-        Move currentTarget;
+        Entity currentTarget;
 
         protected override void OnSetup()
         {
@@ -37,7 +37,7 @@ namespace GR.Player
                 var a = Physics2D.OverlapCircle(CurrentPosition(), searchRange, searchMask.value);
                 if (a != null)
                 {
-                    currentTarget = a.GetComponentInParent<Move>();
+                    currentTarget = a.GetComponentInParent<Entity>();
                 }
             }
             else

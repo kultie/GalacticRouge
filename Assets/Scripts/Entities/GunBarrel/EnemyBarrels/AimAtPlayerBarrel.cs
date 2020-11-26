@@ -15,7 +15,7 @@ namespace GR.Enemy
             Collider2D col = Physics2D.OverlapCircle(owner.CurrentPosition(), searchRange, targetMask.value);
             if (col != null)
             {
-                var target = col.GetComponentInParent<Move>();
+                var target = col.GetComponentInParent<Entity>();
                 Vector2 dir = target.CurrentPosition() - owner.CurrentPosition();
                 var b = SpawnBullet(prefab);
                 b.Setup(owner, transform.position, dir);
