@@ -25,9 +25,16 @@ namespace GR.Enemy
 
         }
 
+        protected override void InternalFixedUpdate(float dt)
+        {
+
+        }
+
         public EnemyBullet CurrentBullet()
         {
             return bullet;
         }
+
+
     }
 }

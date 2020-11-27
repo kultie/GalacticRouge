@@ -16,6 +16,12 @@ namespace GR.Enemy
         float timeBeforeShoot;
         [SerializeField]
         ParticleSystem preShootParticle;
+
+        protected override void InternalUpdate(float dt)
+        {
+
+        }
+
         protected override void Shoot(Bullet<EnemyShip> prefab)
         {
             ScanTarget(prefab);
@@ -25,10 +31,13 @@ namespace GR.Enemy
         {
             Collider2D col = Physics2D.OverlapCircle(owner.CurrentPosition(), searchRange, targetMask.value);
             if (col != null)
-            {                
+            {
+                preShootParticle.Clear();
                 preShootParticle.gameObject.SetActive(true);
+                preShootParticle.Play();
                 timer.After(timeBeforeShoot, () =>
                 {
+                    preShootParticle.Stop();
                     preShootParticle.gameObject.SetActive(false);
                     var target = col.GetComponentInParent<Entity>();
                     Vector2 dir = target.CurrentPosition() - owner.CurrentPosition();
@@ -36,16 +45,6 @@ namespace GR.Enemy
                     b.Setup(owner, transform.position, dir);
                 });
             }
-        }
-
-        protected override void InternalUpdate(float dt)
-        {
-            preShootParticle.Simulate(dt, true, false);
-        }
-
-        protected override void InternalDisable()
-        {
-            preShootParticle.gameObject.SetActive(false);
         }
     }
 }

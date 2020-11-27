@@ -10,12 +10,24 @@ namespace GR.Enemy
 {
     public abstract class EnemyBarrel : GunBarrel<EnemyShip>
     {
+        [SerializeField]
+        EnemyBullet bullet;
         protected Timer timer;
         private void Start()
         {
             EventDispatcher.Subscribe("on_enemy_tick_" + owner.GetInstanceID(), OnPlayerTick);
             EventDispatcher.Subscribe("on_enemy_update_" + owner.GetInstanceID(), OnPlayerUpdate);
+        }
+
+        private void OnEnable()
+        {
             timer = new Timer();
+        }
+
+        private void OnDestroy()
+        {
+            EventDispatcher.UnSubscribe("on_enemy_tick_" + owner.GetInstanceID(), OnPlayerTick);
+            EventDispatcher.UnSubscribe("on_enemy_update_" + owner.GetInstanceID(), OnPlayerUpdate);
         }
 
 
@@ -31,7 +43,12 @@ namespace GR.Enemy
             int totalTick = (int)args["total_tick"];
             if (totalTick % tickRate == 0)
             {
-                Shoot(owner.GetComponent<Shooter>().CurrentBullet());
+                var b = bullet;
+                if (b == null)
+                {
+                    b = owner.GetComponent<Shooter>().CurrentBullet();
+                }
+                Shoot(b);
             }
         }
 

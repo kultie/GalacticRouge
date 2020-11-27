@@ -180,6 +180,7 @@ Transform:
   m_Children:
   - {fileID: 555913933}
   - {fileID: 37244147}
+  - {fileID: 896587097}
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -463,6 +464,36 @@ Transform:
   m_Children: []
   m_Father: {fileID: 118524196}
   m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &896587096
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 896587097}
+  m_Layer: 0
+  m_Name: ParticleContainer
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &896587097
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 896587096}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 118524196}
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1320598250
 GameObject:
@@ -842,40 +873,40 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   levels:
   - enemyData:
-    - enemyPrefab: {fileID: 8991133879251051157, guid: 3893fd230c7ed5e4d95962f58f2172a1,
+    - enemyPrefab: {fileID: 381076179578208372, guid: df25ae0ddc1812f468ee1a69eea7b3cc,
         type: 3}
       count: 2
     - enemyPrefab: {fileID: 8991133879251051157, guid: 3893fd230c7ed5e4d95962f58f2172a1,
         type: 3}
-      count: 3
+      count: 2
   - enemyData:
     - enemyPrefab: {fileID: 73323581762228845, guid: 433a6c89d09a2f240be529d50874d8fd,
         type: 3}
-      count: 2
-    - enemyPrefab: {fileID: 73323581762228845, guid: 433a6c89d09a2f240be529d50874d8fd,
-        type: 3}
-      count: 3
-  - enemyData:
-    - enemyPrefab: {fileID: 73323581762228845, guid: 433a6c89d09a2f240be529d50874d8fd,
-        type: 3}
-      count: 2
-    - enemyPrefab: {fileID: 73323581762228845, guid: 433a6c89d09a2f240be529d50874d8fd,
+      count: 1
+    - enemyPrefab: {fileID: 8991133879251051157, guid: 3893fd230c7ed5e4d95962f58f2172a1,
         type: 3}
       count: 3
   - enemyData:
     - enemyPrefab: {fileID: 73323581762228845, guid: 433a6c89d09a2f240be529d50874d8fd,
         type: 3}
-      count: 2
-    - enemyPrefab: {fileID: 73323581762228845, guid: 433a6c89d09a2f240be529d50874d8fd,
+      count: 5
+    - enemyPrefab: {fileID: 8991133879251051157, guid: 3893fd230c7ed5e4d95962f58f2172a1,
         type: 3}
       count: 3
   - enemyData:
+    - enemyPrefab: {fileID: 8991133879251051157, guid: 3893fd230c7ed5e4d95962f58f2172a1,
+        type: 3}
+      count: 5
     - enemyPrefab: {fileID: 73323581762228845, guid: 433a6c89d09a2f240be529d50874d8fd,
         type: 3}
       count: 2
+  - enemyData:
+    - enemyPrefab: {fileID: 8991133879251051157, guid: 3893fd230c7ed5e4d95962f58f2172a1,
+        type: 3}
+      count: 10
     - enemyPrefab: {fileID: 73323581762228845, guid: 433a6c89d09a2f240be529d50874d8fd,
         type: 3}
-      count: 3
+      count: 1
   minSpawn: 5
   maxSpawn: 10
   itemInterval: 16

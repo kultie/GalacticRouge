@@ -16,9 +16,8 @@ namespace GR.Enemy
             moveComponent.SetPosition(transform.position);
         }
 
-        protected override void OnFixedUpdate(float dt)
+        protected override void InternalFixedUpdate(float dt)
         {
-            Accelerate();
             RotateDisplay();
         }
 

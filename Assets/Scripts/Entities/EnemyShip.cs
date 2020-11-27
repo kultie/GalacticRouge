@@ -29,6 +29,21 @@ namespace GR.Enemy
         public int spawnRequirePoint;
         [SerializeField]
         int exp;
+        [SerializeField]
+        GameParticle deadParticle;
+
+        static GameParticle _defaultDeadParticle;
+        static GameParticle defaultDeadParticle
+        {
+            get
+            {
+                if (!_defaultDeadParticle)
+                {
+                    _defaultDeadParticle = Resources.Load<GameParticle>("Particles/EnemyStandardDeadParticle");
+                }
+                return _defaultDeadParticle;
+            }
+        }
 
         int tickCounter;
         protected int totalTick;
@@ -49,8 +64,6 @@ namespace GR.Enemy
             SetDirection(direction);
             OnSetup();
         }
-
-        protected abstract void OnSetup();
 
         protected virtual void OnAtEdge(Vector2 dir, MapEdge edge)
         {
@@ -73,6 +86,7 @@ namespace GR.Enemy
             EventDispatcher.Dispatch("on_enemy_update_" + GetInstanceID(), new Dictionary<string, object> {
                 { "delta_time", dt}
             });
+            InternalFixedUpdate(dt);
         }
 
         protected virtual void Tick()
@@ -83,8 +97,6 @@ namespace GR.Enemy
                 { "total_tick", totalTick}
             });
         }
-
-        protected abstract void OnTick();
 
         protected virtual void Accelerate()
         {
@@ -119,6 +131,14 @@ namespace GR.Enemy
                 GamePlayManager.AddExp(exp);
                 OnDead();
                 Destroy();
+                if (deadParticle == null)
+                {
+                    GameParticle.PlayParticle(defaultDeadParticle, transform);
+                }
+                else
+                {
+                    GameParticle.PlayParticle(deadParticle, transform);
+                }
             }
         }
 
@@ -132,7 +152,7 @@ namespace GR.Enemy
             EventDispatcher.UnSubscribe("on_take_damage_" + GetInstanceID(), func);
         }
 
-        protected abstract void OnDead();
+
         protected void Destroy()
         {
             if (gameObject.activeInHierarchy)
@@ -141,5 +161,10 @@ namespace GR.Enemy
                 Manager.UpdateManager.RemoveFixedUpdate(OnFixedUpdate);
             }
         }
+
+        protected abstract void InternalFixedUpdate(float dt);
+        protected abstract void OnDead();
+        protected abstract void OnTick();
+        protected abstract void OnSetup();
     }
 }
