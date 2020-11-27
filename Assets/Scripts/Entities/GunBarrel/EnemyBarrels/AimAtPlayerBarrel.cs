@@ -25,7 +25,7 @@ namespace GR.Enemy
         {
             Collider2D col = Physics2D.OverlapCircle(owner.CurrentPosition(), searchRange, targetMask.value);
             if (col != null)
-            {
+            {                
                 preShootParticle.gameObject.SetActive(true);
                 timer.After(timeBeforeShoot, () =>
                 {
