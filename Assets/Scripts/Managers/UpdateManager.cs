@@ -46,7 +46,7 @@ namespace Manager
         {
             float dt = Time.fixedDeltaTime;
             timer.Update();
-            onFixedUpdate?.Invoke(dt);
+            onFixedUpdate?.Invoke(dt * 0.5f);
         }
     }
 }

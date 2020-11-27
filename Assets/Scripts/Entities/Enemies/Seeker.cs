@@ -19,6 +19,7 @@ namespace GR.Enemy
         TickTimer tickTimer;
         protected override void InternalFixedUpdate(float dt)
         {
+            startMoveParticle.Simulate(dt, true, false);
             tickTimer.Update();
             if (!startMove)
             {
@@ -41,6 +42,7 @@ namespace GR.Enemy
                     {
                         startMoveParticle.Clear();
                         startMoveParticle.Play();
+                        startMoveParticle.Simulate(0, false, true);
                         startMoveParticle.gameObject.SetActive(true);
 
                     });

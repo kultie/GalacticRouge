@@ -133,11 +133,11 @@ namespace GR.Enemy
                 Destroy();
                 if (deadParticle == null)
                 {
-                    GameParticle.PlayParticle(defaultDeadParticle, transform);
+                    GameParticle.PlayParticle(defaultDeadParticle, CurrentPosition());
                 }
                 else
                 {
-                    GameParticle.PlayParticle(deadParticle, transform);
+                    GameParticle.PlayParticle(deadParticle, CurrentPosition());
                 }
             }
         }

@@ -60,23 +60,15 @@ public class GameParticle : MonoBehaviour
         }
         system.Simulate(dt, true, false);
     }
-    public static GameParticle PlayParticle(GameParticle p, Transform parent)
+    public static GameParticle PlayParticle(GameParticle p, Vector2 position)
     {
-        var _p = ObjectPool.Spawn(p, parent);
+        var _p = ObjectPool.Spawn(p, particleContainer, position);
         _p.transform.localScale = Vector3.one;
         _p.system.Clear();
+        _p.system.Simulate(0, true, true);
         _p.system.Play();
         return _p;
-    }
-    public static GameParticle PlayParticle(GameParticle p, Transform parent, Vector2 offSet)
-    {
-        Vector2 position = (Vector2)parent.position + offSet;
-        var _p = ObjectPool.Spawn(p, parent, position);
-        _p.transform.localScale = Vector3.one;
-        _p.system.Clear();
-        _p.system.Play();
-        return _p;
-    }
+    }   
 
     public void Stop()
     {

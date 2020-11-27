@@ -16,35 +16,48 @@ namespace GR.Enemy
         float timeBeforeShoot;
         [SerializeField]
         ParticleSystem preShootParticle;
+        Entity target;
 
         protected override void InternalUpdate(float dt)
         {
-
+            preShootParticle.Simulate(dt, true, false);
         }
 
         protected override void Shoot(Bullet<EnemyShip> prefab)
         {
-            ScanTarget(prefab);
+            if (target == null)
+            {
+                preShootParticle.Stop();
+                preShootParticle.gameObject.SetActive(false);
+                target = ScanTarget();
+            }
+            if (target != null)
+            {
+                Vector2 pos = target.CurrentPosition();
+                timer.After(timeBeforeShoot, () =>
+                {                    
+                    Vector2 dir = pos - owner.CurrentPosition();
+                    var b = SpawnBullet(prefab);
+                    b.Setup(owner, transform.position, dir);
+                    target = null;
+                });
+            }
         }
 
-        private void ScanTarget(Bullet<EnemyShip> prefab)
+
+
+        private Entity ScanTarget()
         {
             Collider2D col = Physics2D.OverlapCircle(owner.CurrentPosition(), searchRange, targetMask.value);
             if (col != null)
             {
                 preShootParticle.Clear();
+                preShootParticle.Simulate(0, false, true);
                 preShootParticle.gameObject.SetActive(true);
                 preShootParticle.Play();
-                timer.After(timeBeforeShoot, () =>
-                {
-                    preShootParticle.Stop();
-                    preShootParticle.gameObject.SetActive(false);
-                    var target = col.GetComponentInParent<Entity>();
-                    Vector2 dir = target.CurrentPosition() - owner.CurrentPosition();
-                    var b = SpawnBullet(prefab);
-                    b.Setup(owner, transform.position, dir);
-                });
+                return col.GetComponentInParent<Entity>();
             }
+            return null;
         }
     }
 }

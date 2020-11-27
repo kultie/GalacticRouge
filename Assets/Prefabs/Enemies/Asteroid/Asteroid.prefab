@@ -76,6 +76,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnRequirePoint: 5
   exp: 2
+  deadParticle: {fileID: 0}
   childPrefab: {fileID: 73323581762228845, guid: d66a71e3a6590794ca3df436509365cd,
     type: 3}
 --- !u!114 &73323581762228842
@@ -104,8 +105,8 @@ MonoBehaviour:
   basicStats:
     maxHP: 1
     maxShield: 1
-    tickRate: 0
-    speed: 0
+    tickRate: 5
+    speed: 1
 --- !u!50 &73323581762228841
 Rigidbody2D:
   serializedVersion: 4
