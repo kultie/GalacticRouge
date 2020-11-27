@@ -10,10 +10,19 @@ namespace GR.Player
         private void Start()
         {
             EventDispatcher.Subscribe("on_player_tick", OnPlayerTick);
+            EventDispatcher.Subscribe("on_player_update", OnPlayerUpdate);
         }
 
+        private void OnPlayerUpdate(Dictionary<string, object> args)
+        {
+            float dt = (float)args["delta_time"];
+            InternalUpdate(dt);
+        }
+
+        protected virtual void InternalUpdate(float dt) { }
+
         private void OnPlayerTick(Dictionary<string, object> args)
-        {            
+        {
             int totalTick = (int)args["total_tick"];
             if (totalTick % tickRate == 0)
             {

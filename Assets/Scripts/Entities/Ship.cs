@@ -60,6 +60,9 @@ namespace GR.Player
             {
                 Tick();
             }
+            EventDispatcher.Dispatch("on_player_update", new Dictionary<string, object> {
+                { "delta_time", dt}
+            });
         }
 
         protected virtual void Initialized()

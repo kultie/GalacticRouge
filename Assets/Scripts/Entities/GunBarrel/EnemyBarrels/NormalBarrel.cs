@@ -5,6 +5,11 @@ namespace GR.Enemy
 {
     public class NormalBarrel : EnemyBarrel
     {
+        protected override void InternalUpdate(float dt)
+        {
+
+        }
+
         protected override void Shoot(Bullet<EnemyShip> prefab)
         {
             var b = SpawnBullet(prefab);

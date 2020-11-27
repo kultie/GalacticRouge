@@ -70,6 +70,9 @@ namespace GR.Enemy
                 Tick();
             }
             Accelerate();
+            EventDispatcher.Dispatch("on_enemy_update_" + GetInstanceID(), new Dictionary<string, object> {
+                { "delta_time", dt}
+            });
         }
 
         protected virtual void Tick()
