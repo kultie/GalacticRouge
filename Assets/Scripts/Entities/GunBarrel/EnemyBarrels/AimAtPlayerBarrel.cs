@@ -26,20 +26,19 @@ namespace GR.Enemy
         protected override void Shoot(Bullet<EnemyShip> prefab)
         {
             if (target == null)
-            {
-                preShootParticle.Stop();
-                preShootParticle.gameObject.SetActive(false);
+            {              
                 target = ScanTarget();
             }
             if (target != null)
             {
-                Vector2 pos = target.CurrentPosition();
                 timer.After(timeBeforeShoot, () =>
-                {                    
-                    Vector2 dir = pos - owner.CurrentPosition();
+                {
+                    Vector2 dir = target.CurrentPosition() - owner.CurrentPosition();
                     var b = SpawnBullet(prefab);
                     b.Setup(owner, transform.position, dir);
                     target = null;
+                    preShootParticle.Stop();
+                    preShootParticle.gameObject.SetActive(false);
                 });
             }
         }
