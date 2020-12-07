@@ -489,10 +489,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 39135a783be95a646a3a78e96ca89bb8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tickRate: 5
-  bullet: {fileID: 3300061482306907328, guid: f56e18695a7594944a9686fb19390417, type: 3}
+  tickRate: 1
+  bullet: {fileID: 3300061482306907328, guid: 8bef3c79e58c4634697d941d0189030a, type: 3}
   directionOffset: 15
-  bulletCount: 1
+  bulletCount: 5
 --- !u!1 &896587096
 GameObject:
   m_ObjectHideFlags: 0
@@ -901,7 +901,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   levels:
   - enemyData:
-    - enemyPrefab: {fileID: 381076179578208372, guid: df25ae0ddc1812f468ee1a69eea7b3cc,
+    - enemyPrefab: {fileID: 73323581762228845, guid: 433a6c89d09a2f240be529d50874d8fd,
         type: 3}
       count: 2
   - enemyData:
