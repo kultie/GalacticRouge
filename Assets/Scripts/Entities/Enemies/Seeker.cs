@@ -16,15 +16,15 @@ namespace GR.Enemy
         Vector2 targetDirection;
         int currentTick;
         bool startMove;
-        TickTimer tickTimer;
+        Timer timer;
         protected override void InternalFixedUpdate(float dt)
         {
             startMoveParticle.Simulate(dt, true, false);
-            tickTimer.Update();
+            timer.Update(dt);
             if (!startMove)
             {
                 if (player != null)
-                {                    
+                {
                     currentTick++;
                     Vector2 targetPosition = player.CurrentPosition() + player.CurrentDirection() * stats.GetStat("see_ahead");
                     targetDirection = targetPosition - CurrentPosition();
@@ -38,16 +38,12 @@ namespace GR.Enemy
                 if (col != null)
                 {
                     player = col.GetComponentInParent<Entity>();
-                    tickTimer.After(stats.GetStat("wait_time") - 5, () =>
+                    timer.After(stats.GetStat("wait_time"), () =>
                     {
                         startMoveParticle.Clear();
                         startMoveParticle.Play();
                         startMoveParticle.Simulate(0, false, true);
                         startMoveParticle.gameObject.SetActive(true);
-
-                    });
-                    tickTimer.After(stats.GetStat("wait_time"), () =>
-                    {
                         startMove = true;
                     });
                 }
@@ -82,7 +78,7 @@ namespace GR.Enemy
             currentTick = 0;
             player = null;
             startMove = false;
-            tickTimer = new TickTimer();
+            timer = new Timer();
             startMoveParticle.Clear();
             startMoveParticle.gameObject.SetActive(false);
         }

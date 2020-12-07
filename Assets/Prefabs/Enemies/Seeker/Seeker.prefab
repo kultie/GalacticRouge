@@ -159,16 +159,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   stats:
     m_keys:
-    - search_range
     - wait_time
     - foward_speed
+    - search_range
     - see_ahead
-    m_values: 05000000780000000500000001000000
+    m_values:
+    - 2
+    - 5
+    - 3
+    - 2
   basicStats:
     maxHP: 5
     maxShield: 0
     tickRate: 5
     speed: 1
+    turnRate: 0
 --- !u!114 &8991133879251051163
 MonoBehaviour:
   m_ObjectHideFlags: 0

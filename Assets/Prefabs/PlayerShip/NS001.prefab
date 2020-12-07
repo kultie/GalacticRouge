@@ -113,6 +113,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tickRate: 10
+  bullet: {fileID: 0}
 --- !u!1 &5587692125955347695
 GameObject:
   m_ObjectHideFlags: 0
@@ -218,15 +219,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   stats:
     m_keys:
-    - turn_rate
     - boosted_speed
     - braking_speed
-    m_values: 010000000400000001000000
+    m_values:
+    - 5
+    - 1
   basicStats:
     maxHP: 10
     maxShield: 0
     tickRate: 10
     speed: 2
+    turnRate: 2
 --- !u!50 &4712115462221957506
 Rigidbody2D:
   serializedVersion: 4

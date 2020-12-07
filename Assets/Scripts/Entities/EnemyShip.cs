@@ -124,7 +124,7 @@ namespace GR.Enemy
         {
             if (isDead) return;
             EventDispatcher.Dispatch("on_take_damage_" + GetInstanceID(), args);
-            stats.ProcessHP(-stats.ProcessShield(-(int)args["damage"]));
+            stats.ProcessHP(-stats.ProcessShield(-(float)args["damage"]));
             if (stats.CurrentHP() <= 0)
             {
                 isDead = true;

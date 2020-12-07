@@ -5,9 +5,9 @@ namespace GR.Enemy
     public class Asteroid : EnemyShip
     {
         Vector2 currentRotation = Vector2.up;
-        int speed;
-        int rotateSpeed;
-        int childNumb;
+        float speed;
+        float rotateSpeed;
+        float childNumb;
         [SerializeField]
         Asteroid childPrefab;
 

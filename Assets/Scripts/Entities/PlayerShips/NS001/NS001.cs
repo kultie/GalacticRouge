@@ -48,7 +48,7 @@ namespace GR.Player.NS
 
     public class NS001Context : ShipContext
     {
-        public int currentSpeed { get; private set; }
+        public float currentSpeed { get; private set; }
         public Stats stats { get; private set; }
         public NS001Context(Stats stats)
         {
@@ -56,7 +56,7 @@ namespace GR.Player.NS
             currentSpeed = stats.GetStat("speed");
         }
 
-        public void SetCurrentSpeed(int value)
+        public void SetCurrentSpeed(float value)
         {
             currentSpeed = value;
         }

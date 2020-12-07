@@ -29,7 +29,7 @@ namespace GR.Player
         protected Transform stateContainer;
         protected Vector2 velocity;
 
-        int tickCounter;
+        float tickCounter;
         protected int totalTick;
 
         private void Awake()
@@ -55,10 +55,11 @@ namespace GR.Player
 
         private void OnFixedUpdate(float dt)
         {
-            tickCounter++;
-            if (tickCounter % stats.GetStat("tick_rate") == 0)
+            tickCounter += dt;
+            if (tickCounter >= stats.GetStat("tick_rate"))
             {
                 Tick();
+                tickCounter = 0;
             }
             EventDispatcher.Dispatch("on_player_update", new Dictionary<string, object> {
                 { "delta_time", dt}
@@ -100,7 +101,7 @@ namespace GR.Player
         public void Turn(bool turnRight)
         {
             float currentDir = Core.Utilities.VectorToAngle(currentDirection);
-            int turnRate = stats.GetStat("turn_rate");
+            float turnRate = stats.GetStat("turn_rate");
             currentDir += turnRight ? -turnRate : turnRate;
             currentDirection = Core.Utilities.DegreeToVector2(currentDir);
             currentDirection = currentDirection.normalized;
@@ -121,7 +122,7 @@ namespace GR.Player
         public void OnTakeDamage(Dictionary<string, object> args)
         {
             EventDispatcher.Dispatch("on_player_take_damage", args);
-            stats.ProcessHP(-stats.ProcessShield(-(int)args["damage"]));
+            stats.ProcessHP(-stats.ProcessShield(-(float)args["damage"]));
             if (stats.CurrentHP() <= 0)
             {
                 Debug.Log("Player is dead");
