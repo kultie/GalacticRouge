@@ -12,12 +12,5 @@ namespace GR.Player
         {
             velocity = Vector2.zero;
         }
-
-        protected override void Move()
-        {
-            velocity += acceleratedRate * currentDirection;
-            velocity = Vector2.ClampMagnitude(velocity, speed);
-            moveComponent.SetVelocity(velocity);
-        }
     }
 }

@@ -4,19 +4,12 @@ using System.Collections.Generic;
 using UnityEngine;
 namespace GR.Player
 {
-    public abstract class PlayerBullet : Bullet<Ship>
+    public class PlayerBullet : Bullet<Ship>
     {
-        protected override void Move()
-        {
-            Vector2 velocity = currentDirection * speed;
-            velocity = Vector2.ClampMagnitude(velocity, speed);
-            moveComponent.SetVelocity(velocity);
-        }
-
         protected override void OnCollide(IVulnerable target)
         {
             DamageResolve.Resolve(this, target, damage);
-            Destroy();
+            Destroy(target as Entity);
         }
     }
 }

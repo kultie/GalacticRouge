@@ -27,7 +27,6 @@ namespace GR.Player
         protected override void OnUpdate(float dt)
         {
             Search();
-            Move();
         }
 
         private void Search()

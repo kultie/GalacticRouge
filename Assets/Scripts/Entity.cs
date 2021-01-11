@@ -41,4 +41,14 @@ public class Entity : MonoBehaviour
     {
         return currentDirection;
     }
+
+    public Move GetMoveComponent()
+    {
+        return moveComponent;
+    }
+
+    public void SetCurrentDirection(Vector2 value)
+    {
+        currentDirection = value;
+    }
 }

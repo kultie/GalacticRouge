@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GR.Behaviour;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,7 +11,8 @@ public abstract class Bullet<T> : Entity where T : Entity
     [SerializeField]
     protected int damage;
     protected T owner;
-
+    [SerializeField]
+    EntityBehaviour behaviour;
     public T GetOwner()
     {
         return owner;
@@ -47,7 +49,7 @@ public abstract class Bullet<T> : Entity where T : Entity
     }
     protected virtual void OnUpdate(float dt)
     {
-        Move();
+        behaviour.OnUpdate(dt);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -63,7 +65,6 @@ public abstract class Bullet<T> : Entity where T : Entity
         }
     }
     protected abstract void OnCollide(IVulnerable target);
-    protected abstract void Move();
 
     public virtual void Setup(T owner, Vector2 position, Vector2 direction)
     {
@@ -72,13 +73,20 @@ public abstract class Bullet<T> : Entity where T : Entity
         SetDirection(direction);
         transform.localScale = Vector3.one;
         gameObject.SetActive(true);
+        behaviour.Init(this);
         OnSetup();
     }
 
-    protected abstract void OnSetup();
-
-    protected void Destroy()
+    protected virtual void OnSetup()
     {
+        behaviour.SetVariable("speed", speed);
+        behaviour.SetVariable("damage", damage);
+        behaviour.OnCreate();
+    }
+
+    protected void Destroy(Entity reason = null)
+    {
+        behaviour.OnEntityDestroy(reason);
         if (gameObject.activeInHierarchy)
         {
             ObjectPool.Recycle(this);
