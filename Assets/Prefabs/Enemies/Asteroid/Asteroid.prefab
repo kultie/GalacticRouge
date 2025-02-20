@@ -74,6 +74,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9852609cf0ff855458f241d88234fd00, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  spawnRequirePoint: 5
+  exp: 2
+  deadParticle: {fileID: 0}
   childPrefab: {fileID: 73323581762228845, guid: d66a71e3a6590794ca3df436509365cd,
     type: 3}
 --- !u!114 &73323581762228842
@@ -90,19 +93,27 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   stats:
     m_keys:
-    - max_speed
     - min_speed
-    - max_rotate_speed
+    - max_speed
     - min_rotate_speed
-    - damage
-    - max_scale
+    - max_rotate_speed
     - min_scale
+    - max_scale
     - number_of_child
-    m_values: 0100000002000000050000000200000001000000020000000300000003000000
+    m_values:
+    - 1
+    - 3
+    - 1
+    - 3
+    - 2
+    - 3
+    - 3
   basicStats:
     maxHP: 1
     maxShield: 1
-    tickRate: 0
+    tickRate: 5
+    speed: 1
+    turnRate: 0
 --- !u!50 &73323581762228841
 Rigidbody2D:
   serializedVersion: 4

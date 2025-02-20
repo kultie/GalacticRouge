@@ -90,6 +90,16 @@ namespace Kultie.TimerSystem
                 }
             }
         }
+
+        public void RemoveTag(string tag)
+        {
+            dicTimer.Remove(tag);
+        }
+
+        public void Clear()
+        {
+            dicTimer.Clear();
+        }
     }
 
     class TimerElement

@@ -8,8 +8,8 @@ public class Stats : MonoBehaviour
     StatDictionary stats;
     [SerializeField]
     BasicStats basicStats;
-    private int currentHP;
-    private int currentShield;
+    private float currentHP;
+    private float currentShield;
 
     private StatDictionary modifiedStats;
     private Dictionary<string, bool> dirtyStats = new Dictionary<string, bool>();
@@ -19,7 +19,15 @@ public class Stats : MonoBehaviour
         stats["max_hp"] = basicStats.maxHP;
         stats["max_shield"] = basicStats.maxShield;
         stats["tick_rate"] = basicStats.tickRate;
+        stats["speed"] = basicStats.speed;
+        stats["turn_rate"] = basicStats.turnRate;
         modifiedStats = stats.Clone();
+        currentHP = GetStat("max_hp");
+        currentShield = GetStat("max_shield");
+    }
+
+    private void OnEnable()
+    {
         currentHP = GetStat("max_hp");
         currentShield = GetStat("max_shield");
     }
@@ -33,12 +41,12 @@ public class Stats : MonoBehaviour
             AddModifier(containers[i]);
         }
     }
-    public int GetStat(string key)
+    public float GetStat(string key)
     {
         if (!modifiedStats.ContainsKey(key)) return 0;
         if (dirtyStats.ContainsKey(key) && dirtyStats[key])
         {
-            int oldValue = modifiedStats["max_hp"];
+            float oldValue = modifiedStats["max_hp"];
 
             modifiedStats[key] = RecalculatedStats(key);
             UpdateStat(key, oldValue, modifiedStats[key]);
@@ -47,9 +55,9 @@ public class Stats : MonoBehaviour
         return modifiedStats[key];
     }
 
-    private int RecalculatedStats(string key)
+    private float RecalculatedStats(string key)
     {
-        int rawStats = stats[key];
+        float rawStats = stats[key];
         float totalPercent = 0;
         int totalFlat = 0;
         foreach (var kv in statsModifier)
@@ -88,25 +96,25 @@ public class Stats : MonoBehaviour
         }
     }
 
-    public int CurrentHP()
+    public float CurrentHP()
     {
         return currentHP;
     }
 
-    public int CurrentShield()
+    public float CurrentShield()
     {
         return currentShield;
     }
 
-    public void ProcessHP(int value)
+    public void ProcessHP(float value)
     {
         currentHP += value;
         currentHP = Mathf.Clamp(currentHP, 0, GetStat("max_hp"));
     }
 
-    public int ProcessShield(int value)
+    public float ProcessShield(float value)
     {
-        int leftOver = 0;
+        float leftOver = 0;
         if (value < 0)
         {
             leftOver = Mathf.Abs(value) - currentShield;
@@ -117,7 +125,7 @@ public class Stats : MonoBehaviour
         return leftOver;
     }
 
-    private void UpdateStat(string key, int oldValue, int newValue)
+    private void UpdateStat(string key, float oldValue, float newValue)
     {
         float percentChange = newValue * 1f / oldValue;
         if (key == "max_hp")
@@ -139,7 +147,7 @@ public class Stats : MonoBehaviour
     }
 }
 [Serializable]
-public class StatDictionary : SerializableDictionary<string, int>
+public class StatDictionary : SerializableDictionary<string, float>
 {
     public StatDictionary Clone()
     {
@@ -167,7 +175,9 @@ public class StatsModifierValue
 [Serializable]
 public class BasicStats
 {
-    public int maxHP;
-    public int maxShield;
-    public int tickRate;
+    public float maxHP;
+    public float maxShield;
+    public float tickRate;
+    public float speed;
+    public float turnRate;
 }

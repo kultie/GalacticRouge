@@ -5,124 +5,138 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-[RequireComponent(typeof(Stats))]
-public abstract class Ship : Entity, IVulnerable
+namespace GR.Player
 {
-    private Stats _st;
-    protected Stats stats
+    [RequireComponent(typeof(Stats))]
+    [RequireComponent(typeof(Rigidbody2D))]
+    public abstract class Ship : Entity, IVulnerable
     {
-        get
+        private Stats _st;
+        protected Stats stats
         {
-            if (!_st)
+            get
             {
-                _st = GetComponent<Stats>();
+                if (!_st)
+                {
+                    _st = GetComponent<Stats>();
+                }
+                return _st;
             }
-            return _st;
         }
-    }
+        [SerializeField]
+        PlayerBullet currentBullet;
+        [SerializeField]
+        protected Transform stateContainer;
+        protected Vector2 velocity;
 
-    [SerializeField]
-    PlayerBullet currentBullet;
-    [SerializeField]
-    Transform gunPosition;
-    [SerializeField]
-    protected Transform stateContainer;
-    protected Vector2 velocity;
+        float tickCounter;
+        protected int totalTick;
 
-    int tickCounter;
-
-    private void Awake()
-    {
-        moveComponent.SetPosition(transform.position);
-        moveComponent.SetOnAtMapBound(OnAtMapEdge);
-    }
-
-    private void Start()
-    {
-        Initialized();
-    }
-
-    private void OnEnable()
-    {
-        Manager.UpdateManager.AddFixedUpdate(OnFixedUpdate);
-    }
-
-    private void OnDisable()
-    {
-        Manager.UpdateManager.RemoveFixedUpdate(OnFixedUpdate);
-    }
-
-    private void OnFixedUpdate(float dt)
-    {
-        tickCounter++;
-        if (tickCounter >= stats.GetStat("tick_rate"))
+        private void Awake()
         {
-            Tick();
-            tickCounter = 0;
+            moveComponent.SetPosition(transform.position);
+            moveComponent.SetOnAtMapBound(OnAtMapEdge);
         }
-    }
 
-    protected virtual void Initialized()
-    {
-
-    }
-
-    protected virtual void Tick()
-    {
-        SpawnBullet();
-    }
-
-    private void OnAtMapEdge(Vector2 arg1, MapEdge arg2)
-    {
-        Vector2 norm = GameMap.GetEdgeNormal(arg2);
-        currentDirection = moveComponent.RelectVelocity(arg1.normalized, norm).normalized;
-        float speed = stats.GetStat("speed");
-        velocity = currentDirection * speed;
-        moveComponent.SetVelocity(velocity);
-        displayComponent.SetDirection(velocity.normalized);
-    }
-
-    public virtual void Accelerate()
-    {
-        float speed = stats.GetStat("speed");
-        velocity += currentDirection * speed;
-        velocity = Vector2.ClampMagnitude(velocity, speed);
-        moveComponent.SetVelocity(velocity);
-        displayComponent.SetDirection(velocity.normalized);
-    }
-
-    public void Turn(bool turnRight)
-    {
-        float currentDir = Core.Utilities.VectorToAngle(currentDirection);
-        int turnRate = stats.GetStat("turn_rate");
-        currentDir += turnRight ? -turnRate : turnRate;
-        currentDirection = Core.Utilities.DegreeToVector2(currentDir);
-        currentDirection = currentDirection.normalized;
-    }
-
-    protected virtual void SpawnBullet()
-    {
-        PlayerBullet b = ObjectPool.Spawn(currentBullet);
-        b.transform.localScale = Vector3.one;
-        b.Setup(this, gunPosition.position, currentDirection);
-    }
-
-    public abstract void OnActiveSpecial(int index);
-
-    public void OnTakeDamage(Dictionary<string, object> args)
-    {
-        EventDispatcher.Dispatch("on_player_take_damage", args);
-        stats.ProcessHP(-stats.ProcessShield(-(int)args["damage"]));
-        if (stats.CurrentHP() <= 0) {
-            Debug.Log("Player is dead");
+        private void Start()
+        {
+            Initialized();
         }
-    }
 
-    protected void AddOnPlayerTakeDamageCallback(Caller func) {
-        EventDispatcher.Subscribe("on_player_take_damage", func);
-    }
+        private void OnEnable()
+        {
+            Manager.UpdateManager.AddFixedUpdate(OnFixedUpdate);
+        }
 
-    protected void RemoveOnPlayerTakeDamageCallback(Caller func) {
-        EventDispatcher.UnSubscribe("on_player_take_damage", func);
+        private void OnDisable()
+        {
+            Manager.UpdateManager.RemoveFixedUpdate(OnFixedUpdate);
+        }
+
+        private void OnFixedUpdate(float dt)
+        {
+            tickCounter += dt;
+            if (tickCounter >= stats.GetStat("tick_rate"))
+            {
+                Tick();
+                tickCounter = 0;
+            }
+            EventDispatcher.Dispatch("on_player_update", new Dictionary<string, object> {
+                { "delta_time", dt}
+            });
+        }
+
+        protected virtual void Initialized()
+        {
+
+        }
+
+        protected virtual void Tick()
+        {
+            totalTick++;
+            EventDispatcher.Dispatch("on_player_tick", new Dictionary<string, object> {
+                { "total_tick", totalTick}
+            });
+        }
+
+        private void OnAtMapEdge(Vector2 arg1, MapEdge arg2)
+        {
+            Vector2 norm = GameMap.GetEdgeNormal(arg2);
+            currentDirection = moveComponent.RelectVelocity(arg1.normalized, norm).normalized;
+            float speed = stats.GetStat("speed");
+            velocity = currentDirection * speed;
+            moveComponent.SetVelocity(velocity);
+            displayComponent.SetDirection(velocity.normalized);
+        }
+
+        public virtual void Accelerate()
+        {
+            float speed = stats.GetStat("speed");
+            velocity += currentDirection * speed;
+            velocity = Vector2.ClampMagnitude(velocity, speed);
+            moveComponent.SetVelocity(velocity);
+            displayComponent.SetDirection(velocity.normalized);
+        }
+
+        public void Turn(bool turnRight)
+        {
+            float currentDir = Core.Utilities.VectorToAngle(currentDirection);
+            float turnRate = stats.GetStat("turn_rate");
+            currentDir += turnRight ? -turnRate : turnRate;
+            currentDirection = Core.Utilities.DegreeToVector2(currentDir);
+            currentDirection = currentDirection.normalized;
+        }
+
+        protected void ChangeBullet(PlayerBullet newBullet)
+        {
+            currentBullet = newBullet;
+        }
+
+        public PlayerBullet CurrentBullet()
+        {
+            return currentBullet;
+        }
+
+        public abstract void OnActiveSpecial(int index);
+
+        public void OnTakeDamage(Dictionary<string, object> args)
+        {
+            EventDispatcher.Dispatch("on_player_take_damage", args);
+            stats.ProcessHP(-stats.ProcessShield(-(float)args["damage"]));
+            if (stats.CurrentHP() <= 0)
+            {
+                Debug.Log("Player is dead");
+            }
+        }
+
+        protected void AddOnPlayerTakeDamageCallback(Caller func)
+        {
+            EventDispatcher.Subscribe("on_player_take_damage", func);
+        }
+
+        protected void RemoveOnPlayerTakeDamageCallback(Caller func)
+        {
+            EventDispatcher.UnSubscribe("on_player_take_damage", func);
+        }
     }
 }

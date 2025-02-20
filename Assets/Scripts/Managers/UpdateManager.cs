@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using Kultie.TimerSystem;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 namespace Manager
@@ -9,6 +10,11 @@ namespace Manager
     {
         private OnUpdate onUpdate;
         private OnFixedUpdate onFixedUpdate;
+        public static TickTimer timer;
+        private void Start()
+        {
+            timer = new TickTimer();
+        }
 
         public static void AddUpdate(OnUpdate updater)
         {
@@ -39,6 +45,7 @@ namespace Manager
         private void FixedUpdate()
         {
             float dt = Time.fixedDeltaTime;
+            timer.Update();
             onFixedUpdate?.Invoke(dt);
         }
     }

@@ -1,20 +1,23 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-public class AcceleratedBullet : PlayerBullet
+namespace GR.Player
 {
-    [SerializeField]
-    float acceleratedRate;
-    Vector2 velocity;
-    protected override void OnSetup()
+    public class AcceleratedBullet : PlayerBullet
     {
-        velocity = Vector2.zero;
-    }
+        [SerializeField]
+        float acceleratedRate;
+        Vector2 velocity;
+        protected override void OnSetup()
+        {
+            velocity = Vector2.zero;
+        }
 
-    protected override void Move()
-    {
-        velocity += acceleratedRate * currentDirection;
-        velocity = Vector2.ClampMagnitude(velocity, speed);
-        moveComponent.SetVelocity(velocity);
+        protected override void Move()
+        {
+            velocity += acceleratedRate * currentDirection;
+            velocity = Vector2.ClampMagnitude(velocity, speed);
+            moveComponent.SetVelocity(velocity);
+        }
     }
 }

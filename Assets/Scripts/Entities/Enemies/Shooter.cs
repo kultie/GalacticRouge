@@ -1,0 +1,40 @@
+﻿using Components;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.Rendering;
+
+namespace GR.Enemy
+{
+    public class Shooter : EnemyShip
+    {
+        [SerializeField]
+        EnemyBullet bullet;
+        protected override void OnDead()
+        {
+
+        }
+
+        protected override void OnSetup()
+        {
+
+        }
+
+        protected override void OnTick()
+        {
+
+        }
+
+        protected override void InternalFixedUpdate(float dt)
+        {
+
+        }
+
+        public EnemyBullet CurrentBullet()
+        {
+            return bullet;
+        }
+
+
+    }
+}

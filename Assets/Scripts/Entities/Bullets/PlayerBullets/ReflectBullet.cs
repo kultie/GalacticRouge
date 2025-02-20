@@ -2,29 +2,32 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
-public class ReflectBullet : PlayerBullet
+namespace GR.Player
 {
-    [SerializeField]
-    int bounceCount;
-    int currentBounceCount;
-    protected override void OnSetup()
+    public class ReflectBullet : PlayerBullet
     {
-        currentBounceCount = bounceCount;
-    }
-
-    protected override void OnMapBound(Vector2 arg1, MapEdge arg2)
-    {
-        if (currentBounceCount > 0)
+        [SerializeField]
+        int bounceCount;
+        int currentBounceCount;
+        protected override void OnSetup()
         {
-            Vector2 norm = GameMap.GetEdgeNormal(arg2);
-            currentDirection = moveComponent.RelectVelocity(arg1.normalized, norm).normalized;
-            moveComponent.SetVelocity(currentDirection * speed);
-            displayComponent.SetDirection(currentDirection);
-            currentBounceCount--;
+            currentBounceCount = bounceCount;
         }
-        else {
-            Destroy();
+
+        protected override void OnMapBound(Vector2 arg1, MapEdge arg2)
+        {
+            if (currentBounceCount > 0)
+            {
+                Vector2 norm = GameMap.GetEdgeNormal(arg2);
+                currentDirection = moveComponent.RelectVelocity(arg1.normalized, norm).normalized;
+                moveComponent.SetVelocity(currentDirection * speed);
+                displayComponent.SetDirection(currentDirection);
+                currentBounceCount--;
+            }
+            else
+            {
+                Destroy();
+            }
         }
     }
 }

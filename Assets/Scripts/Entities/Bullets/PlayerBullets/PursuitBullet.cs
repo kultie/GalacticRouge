@@ -1,59 +1,63 @@
-﻿using System.Collections;
+﻿using Components;
+using GR.Enemy;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
-public class PursuitBullet : PlayerBullet
+namespace GR.Player
 {
-    [SerializeField]
-    float searchRange;
-    [SerializeField]
-    float freeRange;
-    [SerializeField]
-    LayerMask searchMask;
-    [SerializeField]
-    float turnRate;
-
-    Vector2 velocity;
-    Enemy currentTarget;
-
-    protected override void OnSetup()
+    public class PursuitBullet : PlayerBullet
     {
-        currentTarget = null;
-    }
+        [SerializeField]
+        float searchRange;
+        [SerializeField]
+        float freeRange;
+        [SerializeField]
+        LayerMask searchMask;
+        [SerializeField]
+        float turnRate;
 
-    protected override void OnUpdate(float dt)
-    {
-        Search();
-        Move();
-    }
+        Vector2 velocity;
+        Entity currentTarget;
 
-    private void Search()
-    {
-        if (currentTarget == null)
-        {
-            var a = Physics2D.OverlapCircle(CurrentPosition(), searchRange, searchMask.value);
-            if (a != null)
-            {
-                currentTarget = a.GetComponentInParent<Enemy>();
-            }
-        }
-        else
-        {
-            Pursuit();
-        }
-    }
-
-    private void Pursuit()
-    {
-        Vector2 targetDirection = currentTarget.CurrentPosition() - CurrentPosition();
-        if (targetDirection.magnitude > freeRange || !currentTarget.gameObject.activeInHierarchy)
+        protected override void OnSetup()
         {
             currentTarget = null;
         }
-        else
+
+        protected override void OnUpdate(float dt)
         {
-            currentDirection = Vector2.Lerp(currentDirection, targetDirection, turnRate);
-            displayComponent.SetDirection(currentDirection);
+            Search();
+            Move();
+        }
+
+        private void Search()
+        {
+            if (currentTarget == null)
+            {
+                var a = Physics2D.OverlapCircle(CurrentPosition(), searchRange, searchMask.value);
+                if (a != null)
+                {
+                    currentTarget = a.GetComponentInParent<Entity>();
+                }
+            }
+            else
+            {
+                Pursuit();
+            }
+        }
+
+        private void Pursuit()
+        {
+            Vector2 targetDirection = currentTarget.CurrentPosition() - CurrentPosition();
+            if (targetDirection.magnitude > freeRange || !currentTarget.gameObject.activeInHierarchy)
+            {
+                currentTarget = null;
+            }
+            else
+            {
+                currentDirection = Vector2.Lerp(currentDirection, targetDirection, turnRate);
+                displayComponent.SetDirection(currentDirection);
+            }
         }
     }
 }
